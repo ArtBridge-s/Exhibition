@@ -1,4 +1,4 @@
-package com.artbridge.exhibition.domain;
+package com.artbridge.exhibition.domain.model;
 
 import com.artbridge.exhibition.domain.enumeration.Status;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

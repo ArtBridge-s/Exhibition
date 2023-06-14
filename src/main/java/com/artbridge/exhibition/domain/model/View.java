@@ -1,4 +1,4 @@
-package com.artbridge.exhibition.domain;
+package com.artbridge.exhibition.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
@@ -8,11 +8,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 /**
- * A Comment.
+ * A View.
  */
-@Document(collection = "comment")
+@Document(collection = "view")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Comment implements Serializable {
+public class View implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -21,9 +21,6 @@ public class Comment implements Serializable {
 
     @Field("vo_member")
     private Long voMember;
-
-    @Field("content")
-    private String content;
 
     @DBRef
     @Field("artwork")
@@ -36,7 +33,7 @@ public class Comment implements Serializable {
         return this.id;
     }
 
-    public Comment id(String id) {
+    public View id(String id) {
         this.setId(id);
         return this;
     }
@@ -49,26 +46,13 @@ public class Comment implements Serializable {
         return this.voMember;
     }
 
-    public Comment voMember(Long voMember) {
+    public View voMember(Long voMember) {
         this.setVoMember(voMember);
         return this;
     }
 
     public void setVoMember(Long voMember) {
         this.voMember = voMember;
-    }
-
-    public String getContent() {
-        return this.content;
-    }
-
-    public Comment content(String content) {
-        this.setContent(content);
-        return this;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
     }
 
     public Exhibition getArtwork() {
@@ -79,7 +63,7 @@ public class Comment implements Serializable {
         this.artwork = exhibition;
     }
 
-    public Comment artwork(Exhibition exhibition) {
+    public View artwork(Exhibition exhibition) {
         this.setArtwork(exhibition);
         return this;
     }
@@ -91,10 +75,10 @@ public class Comment implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Comment)) {
+        if (!(o instanceof View)) {
             return false;
         }
-        return id != null && id.equals(((Comment) o).id);
+        return id != null && id.equals(((View) o).id);
     }
 
     @Override
@@ -106,10 +90,9 @@ public class Comment implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-        return "Comment{" +
+        return "View{" +
             "id=" + getId() +
             ", voMember=" + getVoMember() +
-            ", content='" + getContent() + "'" +
             "}";
     }
 }

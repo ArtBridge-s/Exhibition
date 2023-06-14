@@ -1,10 +1,12 @@
 package com.artbridge.exhibition.service.dto;
 
 import java.io.Serializable;
+
+import com.artbridge.exhibition.domain.model.Comment;
 import lombok.Data;
 
 /**
- * A DTO for the {@link com.artbridge.exhibition.domain.Comment} entity.
+ * A DTO for the {@link Comment} entity.
  */
 @Data
 public class CommentDTO implements Serializable {

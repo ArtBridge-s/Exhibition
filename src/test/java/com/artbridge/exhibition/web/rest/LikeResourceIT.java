@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.artbridge.exhibition.IntegrationTest;
-import com.artbridge.exhibition.domain.Like;
+import com.artbridge.exhibition.domain.model.Like;
 import com.artbridge.exhibition.repository.LikeRepository;
 import com.artbridge.exhibition.service.dto.LikeDTO;
 import com.artbridge.exhibition.service.mapper.LikeMapper;

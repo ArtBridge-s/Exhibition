@@ -1,10 +1,12 @@
 package com.artbridge.exhibition.service.dto;
 
 import java.io.Serializable;
+
+import com.artbridge.exhibition.domain.model.Like;
 import lombok.Data;
 
 /**
- * A DTO for the {@link com.artbridge.exhibition.domain.Like} entity.
+ * A DTO for the {@link Like} entity.
  */
 @Data
 public class LikeDTO implements Serializable {

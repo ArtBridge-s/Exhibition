@@ -1,10 +1,12 @@
 package com.artbridge.exhibition.service.dto;
 
 import java.io.Serializable;
+
+import com.artbridge.exhibition.domain.model.View;
 import lombok.Data;
 
 /**
- * A DTO for the {@link com.artbridge.exhibition.domain.View} entity.
+ * A DTO for the {@link View} entity.
  */
 @Data
 public class ViewDTO implements Serializable {

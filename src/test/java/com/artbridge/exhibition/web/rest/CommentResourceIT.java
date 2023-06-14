@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.artbridge.exhibition.IntegrationTest;
-import com.artbridge.exhibition.domain.Comment;
+import com.artbridge.exhibition.domain.model.Comment;
 import com.artbridge.exhibition.repository.CommentRepository;
 import com.artbridge.exhibition.service.dto.CommentDTO;
 import com.artbridge.exhibition.service.mapper.CommentMapper;

@@ -1,6 +1,6 @@
 package com.artbridge.exhibition.service.impl;
 
-import com.artbridge.exhibition.domain.Comment;
+import com.artbridge.exhibition.domain.model.Comment;
 import com.artbridge.exhibition.repository.CommentRepository;
 import com.artbridge.exhibition.service.CommentService;
 import com.artbridge.exhibition.service.dto.CommentDTO;

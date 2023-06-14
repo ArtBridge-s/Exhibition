@@ -1,12 +1,13 @@
 package com.artbridge.exhibition.service;
 
+import com.artbridge.exhibition.domain.model.Like;
 import com.artbridge.exhibition.service.dto.LikeDTO;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- * Service Interface for managing {@link com.artbridge.exhibition.domain.Like}.
+ * Service Interface for managing {@link Like}.
  */
 public interface LikeService {
     /**

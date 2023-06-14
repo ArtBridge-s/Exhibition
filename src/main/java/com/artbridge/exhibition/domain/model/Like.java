@@ -1,4 +1,4 @@
-package com.artbridge.exhibition.domain;
+package com.artbridge.exhibition.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
