@@ -33,33 +33,4 @@ public class Comment implements Serializable {
     @JsonIgnoreProperties(value = { "comments", "views", "likes" }, allowSetters = true)
     private Exhibition exhibition;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-
-    public String getId() {
-        return this.id;
-    }
-
-    public Comment id(String id) {
-        this.setId(id);
-        return this;
-    }
-
-
-    public Comment voMember(Member voMember) {
-        this.setCreatedMember(voMember);
-        return this;
-    }
-
-
-    public Comment content(String content) {
-        this.setContent(content);
-        return this;
-    }
-
-
-    public Comment artwork(Exhibition exhibition) {
-        this.setExhibition(exhibition);
-        return this;
-    }
-
 }
