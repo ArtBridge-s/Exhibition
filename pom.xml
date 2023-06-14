@@ -93,6 +93,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.26</version>
         </dependency>
         <dependency>
             <groupId>tech.jhipster</groupId>
@@ -432,6 +433,7 @@
                             <path>
                                 <groupId>org.projectlombok</groupId>
                                 <artifactId>lombok</artifactId>
+                                <version>1.18.26</version>
                             </path>
                             <path>
                                 <groupId>org.mapstruct</groupId>
