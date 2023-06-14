@@ -11,8 +11,13 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface ViewMapper extends EntityMapper<ViewDTO, View> {
-    @Mapping(target = "artwork", source = "artwork", qualifiedByName = "exhibitionId")
+    @Mapping(target = "exhibitionDTO", source = "exhibition", qualifiedByName = "exhibitionId")
+    @Mapping(target = "memberDTO", source = "createdMember")
     ViewDTO toDto(View s);
+
+    @Mapping(target = "exhibition", source = "exhibitionDTO")
+    @Mapping(target = "createdMember", source = "memberDTO")
+    View toEntity(ViewDTO viewDTO);
 
     @Named("exhibitionId")
     @BeanMapping(ignoreByDefault = true)

@@ -140,13 +140,13 @@ public class Exhibition implements Serializable {
 
     public Exhibition addViews(View view) {
         this.views.add(view);
-        view.setArtwork(this);
+        view.setExhibition(this);
         return this;
     }
 
     public Exhibition removeViews(View view) {
         this.views.remove(view);
-        view.setArtwork(null);
+        view.setExhibition(null);
         return this;
     }
 
