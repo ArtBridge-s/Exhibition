@@ -1,10 +1,10 @@
 package com.artbridge.exhibition.web.rest;
 
 import com.artbridge.exhibition.domain.model.Exhibition;
-import com.artbridge.exhibition.repository.ExhibitionRepository;
-import com.artbridge.exhibition.service.ExhibitionService;
-import com.artbridge.exhibition.service.dto.ExhibitionDTO;
-import com.artbridge.exhibition.web.rest.errors.BadRequestAlertException;
+import com.artbridge.exhibition.infrastructure.repository.ExhibitionRepository;
+import com.artbridge.exhibition.application.service.ExhibitionService;
+import com.artbridge.exhibition.application.dto.ExhibitionDTO;
+import com.artbridge.exhibition.web.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;

@@ -1,10 +1,10 @@
 package com.artbridge.exhibition.web.rest;
 
 import com.artbridge.exhibition.domain.model.Like;
-import com.artbridge.exhibition.repository.LikeRepository;
-import com.artbridge.exhibition.service.LikeService;
-import com.artbridge.exhibition.service.dto.LikeDTO;
-import com.artbridge.exhibition.web.rest.errors.BadRequestAlertException;
+import com.artbridge.exhibition.infrastructure.repository.LikeRepository;
+import com.artbridge.exhibition.application.service.LikeService;
+import com.artbridge.exhibition.application.dto.LikeDTO;
+import com.artbridge.exhibition.web.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;

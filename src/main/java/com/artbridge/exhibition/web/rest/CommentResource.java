@@ -1,10 +1,10 @@
 package com.artbridge.exhibition.web.rest;
 
 import com.artbridge.exhibition.domain.model.Comment;
-import com.artbridge.exhibition.repository.CommentRepository;
-import com.artbridge.exhibition.service.CommentService;
-import com.artbridge.exhibition.service.dto.CommentDTO;
-import com.artbridge.exhibition.web.rest.errors.BadRequestAlertException;
+import com.artbridge.exhibition.infrastructure.repository.CommentRepository;
+import com.artbridge.exhibition.application.service.CommentService;
+import com.artbridge.exhibition.application.dto.CommentDTO;
+import com.artbridge.exhibition.web.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;

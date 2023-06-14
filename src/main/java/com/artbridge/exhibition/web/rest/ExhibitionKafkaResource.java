@@ -2,8 +2,8 @@ package com.artbridge.exhibition.web.rest;
 
 import static org.springframework.web.servlet.mvc.method.annotation.SseEmitter.event;
 
-import com.artbridge.exhibition.config.KafkaSseConsumer;
-import com.artbridge.exhibition.config.KafkaSseProducer;
+import com.artbridge.exhibition.infrastructure.config.KafkaSseConsumer;
+import com.artbridge.exhibition.infrastructure.config.KafkaSseProducer;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.HashMap;
