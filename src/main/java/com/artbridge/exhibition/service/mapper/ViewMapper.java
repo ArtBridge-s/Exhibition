@@ -1,7 +1,7 @@
 package com.artbridge.exhibition.service.mapper;
 
-import com.artbridge.exhibition.domain.Exhibition;
-import com.artbridge.exhibition.domain.View;
+import com.artbridge.exhibition.domain.model.Exhibition;
+import com.artbridge.exhibition.domain.model.View;
 import com.artbridge.exhibition.service.dto.ExhibitionDTO;
 import com.artbridge.exhibition.service.dto.ViewDTO;
 import org.mapstruct.*;

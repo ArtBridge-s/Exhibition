@@ -1,6 +1,6 @@
 package com.artbridge.exhibition.service.impl;
 
-import com.artbridge.exhibition.domain.Like;
+import com.artbridge.exhibition.domain.model.Like;
 import com.artbridge.exhibition.repository.LikeRepository;
 import com.artbridge.exhibition.service.LikeService;
 import com.artbridge.exhibition.service.dto.LikeDTO;

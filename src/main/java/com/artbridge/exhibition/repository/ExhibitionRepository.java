@@ -1,8 +1,7 @@
 package com.artbridge.exhibition.repository;
 
-import com.artbridge.exhibition.domain.Exhibition;
+import com.artbridge.exhibition.domain.model.Exhibition;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**

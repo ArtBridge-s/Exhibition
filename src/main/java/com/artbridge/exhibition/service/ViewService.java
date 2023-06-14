@@ -1,12 +1,13 @@
 package com.artbridge.exhibition.service;
 
+import com.artbridge.exhibition.domain.model.View;
 import com.artbridge.exhibition.service.dto.ViewDTO;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 /**
- * Service Interface for managing {@link com.artbridge.exhibition.domain.View}.
+ * Service Interface for managing {@link View}.
  */
 public interface ViewService {
     /**

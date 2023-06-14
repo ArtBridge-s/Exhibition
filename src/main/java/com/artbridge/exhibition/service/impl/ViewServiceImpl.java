@@ -1,6 +1,6 @@
 package com.artbridge.exhibition.service.impl;
 
-import com.artbridge.exhibition.domain.View;
+import com.artbridge.exhibition.domain.model.View;
 import com.artbridge.exhibition.repository.ViewRepository;
 import com.artbridge.exhibition.service.ViewService;
 import com.artbridge.exhibition.service.dto.ViewDTO;
