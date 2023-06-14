@@ -14,7 +14,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
  */
 @Document(collection = "like")
 @Data
-@SuppressWarnings("common-java:DuplicatedBlocks")
 public class Like implements Serializable {
 
     private static final long serialVersionUID = 1L;

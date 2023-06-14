@@ -14,7 +14,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
  */
 @Document(collection = "comment")
 @Data
-@SuppressWarnings("common-java:DuplicatedBlocks")
 public class Comment implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -17,7 +17,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
  */
 @Document(collection = "exhibition")
 @Data
-@SuppressWarnings("common-java:DuplicatedBlocks")
 public class Exhibition implements Serializable {
 
     private static final long serialVersionUID = 1L;
