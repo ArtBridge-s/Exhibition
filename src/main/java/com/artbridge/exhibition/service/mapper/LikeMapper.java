@@ -11,8 +11,13 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface LikeMapper extends EntityMapper<LikeDTO, Like> {
-    @Mapping(target = "artwork", source = "artwork", qualifiedByName = "exhibitionId")
+    @Mapping(target = "exhibitionDTO", source = "exhibition", qualifiedByName = "exhibitionId")
+    @Mapping(target = "memberDTO", source = "createdMember")
     LikeDTO toDto(Like s);
+
+    @Mapping(target = "exhibition", source = "exhibitionDTO")
+    @Mapping(target = "createdMember", source = "memberDTO")
+    Like toEntity(LikeDTO dto);
 
     @Named("exhibitionId")
     @BeanMapping(ignoreByDefault = true)

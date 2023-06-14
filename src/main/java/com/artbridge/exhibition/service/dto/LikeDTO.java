@@ -12,6 +12,6 @@ import lombok.Data;
 public class LikeDTO implements Serializable {
 
     private String id;
-    private Long voMember;
-    private ExhibitionDTO artwork;
+    private MemberDTO memberDTO;
+    private ExhibitionDTO exhibitionDTO;
 }

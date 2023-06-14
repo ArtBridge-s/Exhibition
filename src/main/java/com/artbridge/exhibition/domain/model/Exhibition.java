@@ -157,13 +157,13 @@ public class Exhibition implements Serializable {
 
     public Exhibition addLikes(Like like) {
         this.likes.add(like);
-        like.setArtwork(this);
+        like.setExhibition(this);
         return this;
     }
 
     public Exhibition removeLikes(Like like) {
         this.likes.remove(like);
-        like.setArtwork(null);
+        like.setExhibition(null);
         return this;
     }
 }
