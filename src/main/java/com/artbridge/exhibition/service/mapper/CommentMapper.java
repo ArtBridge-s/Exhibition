@@ -11,8 +11,14 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface CommentMapper extends EntityMapper<CommentDTO, Comment> {
-    @Mapping(target = "artwork", source = "artwork", qualifiedByName = "exhibitionId")
+    @Mapping(target = "exhibitionDTO", source = "exhibition", qualifiedByName = "exhibitionId")
+    @Mapping(target = "createdMemberDTO", source = "createdMember")
     CommentDTO toDto(Comment s);
+
+
+    @Mapping(target = "exhibition", source = "exhibitionDTO")
+    @Mapping(target = "createdMember", source = "createdMemberDTO")
+    Comment toEntity(CommentDTO commentDTO);
 
     @Named("exhibitionId")
     @BeanMapping(ignoreByDefault = true)

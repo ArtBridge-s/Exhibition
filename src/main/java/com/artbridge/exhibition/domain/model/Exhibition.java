@@ -1,11 +1,11 @@
 package com.artbridge.exhibition.domain.model;
 
 import com.artbridge.exhibition.domain.enumeration.Status;
+import com.artbridge.exhibition.domain.valueobject.Member;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -45,8 +45,8 @@ public class Exhibition implements Serializable {
     @Field("vo_artist")
     private String voArtist;
 
-    @Field("vo_member")
-    private String voMember;
+    @Field("member")
+    private Member createdMember;
 
     @Field("status")
     private Status status;
@@ -65,7 +65,6 @@ public class Exhibition implements Serializable {
     @Field("likes")
     @JsonIgnoreProperties(value = { "artwork" }, allowSetters = true)
     private Set<Like> likes = new HashSet<>();
-
 
     public Exhibition id(String id) {
         this.setId(id);
@@ -107,8 +106,8 @@ public class Exhibition implements Serializable {
         return this;
     }
 
-    public Exhibition voMember(String voMember) {
-        this.setVoMember(voMember);
+    public Exhibition voMember(Member createdMember) {
+        this.setCreatedMember(createdMember);
         return this;
     }
 
@@ -124,16 +123,15 @@ public class Exhibition implements Serializable {
 
     public Exhibition addComments(Comment comment) {
         this.comments.add(comment);
-        comment.setArtwork(this);
+        comment.setExhibition(this);
         return this;
     }
 
     public Exhibition removeComments(Comment comment) {
         this.comments.remove(comment);
-        comment.setArtwork(null);
+        comment.setExhibition(null);
         return this;
     }
-
 
     public Exhibition views(Set<View> views) {
         this.setViews(views);
@@ -142,16 +140,15 @@ public class Exhibition implements Serializable {
 
     public Exhibition addViews(View view) {
         this.views.add(view);
-        view.setArtwork(this);
+        view.setExhibition(this);
         return this;
     }
 
     public Exhibition removeViews(View view) {
         this.views.remove(view);
-        view.setArtwork(null);
+        view.setExhibition(null);
         return this;
     }
-
 
     public Exhibition likes(Set<Like> likes) {
         this.setLikes(likes);
@@ -160,13 +157,13 @@ public class Exhibition implements Serializable {
 
     public Exhibition addLikes(Like like) {
         this.likes.add(like);
-        like.setArtwork(this);
+        like.setExhibition(this);
         return this;
     }
 
     public Exhibition removeLikes(Like like) {
         this.likes.remove(like);
-        like.setArtwork(null);
+        like.setExhibition(null);
         return this;
     }
 }
