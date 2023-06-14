@@ -30,20 +30,4 @@ public class Like implements Serializable {
     @JsonIgnoreProperties(value = { "comments", "views", "likes" }, allowSetters = true)
     private Exhibition exhibition;
 
-
-    public Like id(String id) {
-        this.setId(id);
-        return this;
-    }
-
-    public Like voMember(Member voMember) {
-        this.setCreatedMember(voMember);
-        return this;
-    }
-
-    public Like artwork(Exhibition exhibition) {
-        this.setExhibition(exhibition);
-        return this;
-    }
-
 }
