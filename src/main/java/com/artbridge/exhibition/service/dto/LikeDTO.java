@@ -6,7 +6,6 @@ import lombok.Data;
 /**
  * A DTO for the {@link com.artbridge.exhibition.domain.Like} entity.
  */
-@SuppressWarnings("common-java:DuplicatedBlocks")
 @Data
 public class LikeDTO implements Serializable {
 

@@ -6,7 +6,6 @@ import lombok.Data;
 /**
  * A DTO for the {@link com.artbridge.exhibition.domain.View} entity.
  */
-@SuppressWarnings("common-java:DuplicatedBlocks")
 @Data
 public class ViewDTO implements Serializable {
 
