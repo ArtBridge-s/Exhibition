@@ -1,11 +1,11 @@
 package com.artbridge.exhibition.domain.model;
 
 import com.artbridge.exhibition.domain.enumeration.Status;
+import com.artbridge.exhibition.domain.valueobject.Member;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -45,8 +45,8 @@ public class Exhibition implements Serializable {
     @Field("vo_artist")
     private String voArtist;
 
-    @Field("vo_member")
-    private String voMember;
+    @Field("member")
+    private Member createdMember;
 
     @Field("status")
     private Status status;
@@ -65,7 +65,6 @@ public class Exhibition implements Serializable {
     @Field("likes")
     @JsonIgnoreProperties(value = { "artwork" }, allowSetters = true)
     private Set<Like> likes = new HashSet<>();
-
 
     public Exhibition id(String id) {
         this.setId(id);
@@ -107,8 +106,8 @@ public class Exhibition implements Serializable {
         return this;
     }
 
-    public Exhibition voMember(String voMember) {
-        this.setVoMember(voMember);
+    public Exhibition voMember(Member createdMember) {
+        this.setCreatedMember(createdMember);
         return this;
     }
 
@@ -134,7 +133,6 @@ public class Exhibition implements Serializable {
         return this;
     }
 
-
     public Exhibition views(Set<View> views) {
         this.setViews(views);
         return this;
@@ -151,7 +149,6 @@ public class Exhibition implements Serializable {
         view.setArtwork(null);
         return this;
     }
-
 
     public Exhibition likes(Set<Like> likes) {
         this.setLikes(likes);
