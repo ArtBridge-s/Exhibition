@@ -1,5 +1,6 @@
 package com.artbridge.exhibition.domain.model;
 
+import com.artbridge.exhibition.domain.valueobject.Member;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 
@@ -21,16 +22,16 @@ public class Comment implements Serializable {
     @Id
     private String id;
 
-    @Field("vo_member")
-    private Long voMember;
+    @Field("member")
+    private Member createdMember;
 
     @Field("content")
     private String content;
 
     @DBRef
-    @Field("artwork")
+    @Field("exhibition")
     @JsonIgnoreProperties(value = { "comments", "views", "likes" }, allowSetters = true)
-    private Exhibition artwork;
+    private Exhibition exhibition;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -44,8 +45,8 @@ public class Comment implements Serializable {
     }
 
 
-    public Comment voMember(Long voMember) {
-        this.setVoMember(voMember);
+    public Comment voMember(Member voMember) {
+        this.setCreatedMember(voMember);
         return this;
     }
 
@@ -57,7 +58,7 @@ public class Comment implements Serializable {
 
 
     public Comment artwork(Exhibition exhibition) {
-        this.setArtwork(exhibition);
+        this.setExhibition(exhibition);
         return this;
     }
 

@@ -123,13 +123,13 @@ public class Exhibition implements Serializable {
 
     public Exhibition addComments(Comment comment) {
         this.comments.add(comment);
-        comment.setArtwork(this);
+        comment.setExhibition(this);
         return this;
     }
 
     public Exhibition removeComments(Comment comment) {
         this.comments.remove(comment);
-        comment.setArtwork(null);
+        comment.setExhibition(null);
         return this;
     }
 

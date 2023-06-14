@@ -12,7 +12,7 @@ import lombok.Data;
 public class CommentDTO implements Serializable {
 
     private String id;
-    private Long voMember;
+    private MemberDTO createdMemberDTO;
     private String content;
-    private ExhibitionDTO artwork;
+    private ExhibitionDTO exhibitionDTO;
 }
