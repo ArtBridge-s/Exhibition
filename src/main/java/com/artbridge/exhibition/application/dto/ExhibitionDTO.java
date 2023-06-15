@@ -18,7 +18,7 @@ public class ExhibitionDTO implements Serializable {
     private String fee;
     private String contact;
     private String imgUrl;
-    private String voPeriod;
+    private PeriodDTO periodDTO;
     private ArtistDTO artistDTO;
     private MemberDTO createdMemberDTO;
     private Status status;
