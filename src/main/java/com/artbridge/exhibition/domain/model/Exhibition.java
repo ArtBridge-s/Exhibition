@@ -3,6 +3,7 @@ package com.artbridge.exhibition.domain.model;
 import com.artbridge.exhibition.domain.enumeration.Status;
 import com.artbridge.exhibition.domain.valueobject.Artist;
 import com.artbridge.exhibition.domain.valueobject.Member;
+import com.artbridge.exhibition.domain.valueobject.Period;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -40,8 +41,8 @@ public class Exhibition implements Serializable {
     @Field("img_url")
     private String imgUrl;
 
-    @Field("vo_period")
-    private String voPeriod;
+    @Field("period")
+    private Period period;
 
     @Field("artist")
     private Artist artist;
