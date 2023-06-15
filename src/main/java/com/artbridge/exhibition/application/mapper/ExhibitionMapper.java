@@ -10,8 +10,10 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface ExhibitionMapper extends EntityMapper<ExhibitionDTO, Exhibition> {
     @Mapping(target = "createdMemberDTO", source = "createdMember")
+    @Mapping(target = "artistDTO", source = "artist")
     ExhibitionDTO toDto(Exhibition exhibition);
 
     @Mapping(target = "createdMember", source = "createdMemberDTO")
+    @Mapping(target = "artist", source = "artistDTO")
     Exhibition toEntity(ExhibitionDTO exhibitionDTO);
 }

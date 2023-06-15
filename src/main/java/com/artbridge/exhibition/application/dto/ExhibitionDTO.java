@@ -3,6 +3,7 @@ package com.artbridge.exhibition.application.dto;
 import com.artbridge.exhibition.domain.enumeration.Status;
 import com.artbridge.exhibition.domain.model.Exhibition;
 import java.io.Serializable;
+
 import lombok.Data;
 
 /**
@@ -18,7 +19,7 @@ public class ExhibitionDTO implements Serializable {
     private String contact;
     private String imgUrl;
     private String voPeriod;
-    private String voArtist;
+    private ArtistDTO artistDTO;
     private MemberDTO createdMemberDTO;
     private Status status;
 }
