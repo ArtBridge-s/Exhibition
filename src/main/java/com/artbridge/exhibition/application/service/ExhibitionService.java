@@ -48,4 +48,6 @@ public interface ExhibitionService {
 
     Page<ExhibitionDTO> findAllByStatus_upload(Pageable pageable);
 
+    Page<ExhibitionDTO> findAllByStatus_delete(Pageable pageable);
+
 }
