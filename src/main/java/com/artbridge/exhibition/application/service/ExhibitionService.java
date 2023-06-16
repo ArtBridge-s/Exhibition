@@ -29,13 +29,7 @@ public interface ExhibitionService {
      */
     Optional<ExhibitionDTO> partialUpdate(ExhibitionDTO exhibitionDTO);
 
-    /**
-     * Get all the exhibitions.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    Page<ExhibitionDTO> findAll(Pageable pageable);
+    Page<ExhibitionDTO> findAllByStatus(Pageable pageable);
 
     /**
      * Get the "id" exhibition.
