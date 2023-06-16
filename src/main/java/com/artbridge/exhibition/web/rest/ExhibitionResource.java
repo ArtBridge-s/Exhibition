@@ -169,7 +169,7 @@ public class ExhibitionResource {
 
     }
 
-    @PreAuthorize("hasAnyRole(AuthoritiesConstants.ADMIN)")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/exhibitions/status/upload")
     public ResponseEntity<List<Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res>> getAllExhibitionsByStatusUpload(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Exhibitions");
@@ -180,7 +180,7 @@ public class ExhibitionResource {
         return ResponseEntity.ok().headers(headers).body(exhibition_get_list_status_ok_res_page.getContent());
     }
 
-    @PreAuthorize("hasAnyRole(AuthoritiesConstants.ADMIN)")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/exhibitions/status/delete")
     public ResponseEntity<List<Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res>> getAllExhibitionsByStatusDelete(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Exhibitions");
