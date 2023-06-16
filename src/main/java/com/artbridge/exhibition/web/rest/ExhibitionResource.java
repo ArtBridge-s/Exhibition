@@ -187,12 +187,6 @@ public class ExhibitionResource {
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build();
     }
 
-    /**
-     * {@code GET  /exhibitions/:id} : get the "id" exhibition.
-     *
-     * @param id the id of the exhibitionDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the exhibitionDTO, or with status {@code 404 (Not Found)}.
-     */
     @GetMapping("/exhibitions/{id}")
     public ResponseEntity<ExhibitionDTO> getExhibition(@PathVariable String id) {
         log.debug("REST request to get Exhibition : {}", id);
