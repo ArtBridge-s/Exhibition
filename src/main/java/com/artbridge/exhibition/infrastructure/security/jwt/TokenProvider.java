@@ -96,6 +96,12 @@ public class TokenProvider {
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
+    public Long getUserIdFromToken(String token) {
+        Claims claims = jwtParser.parseClaimsJws(token).getBody();
+        return claims.get("userId", Long.class);
+    }
+
+
     public boolean validateToken(String authToken) {
         try {
             jwtParser.parseClaimsJws(authToken);
