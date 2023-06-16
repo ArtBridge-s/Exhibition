@@ -13,6 +13,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import com.artbridge.exhibition.web.mapper.*;
+import com.artbridge.exhibition.web.request.ExhibitionByAdminReq;
 import com.artbridge.exhibition.web.request.Exhibition_POST_Req;
 import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res;
 import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_OK_Res;
@@ -61,6 +62,8 @@ public class ExhibitionResource {
     private final Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res_Mapper exhibitionGetListStatusUploadPendingResMapper;
     private final Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res_Mapper exhibitionGetListStatusDeletePendingResMapper;
     private final Exhibition_GET_LIST_STATUS_REVISION_PENDING_Res_Mapper exhibitionGetListStatusRevisionPendingResMapper;
+    private final ExhibitionByAdminReq_Mapper exhibitionByAdminReqMapper;
+
 
 
     @PostMapping("/exhibitions")
@@ -181,6 +184,16 @@ public class ExhibitionResource {
         Page<Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res> exhibition_get_list_status_ok_res_page = page.map(exhibitionGetListStatusDeletePendingResMapper::toRes);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(exhibition_get_list_status_ok_res_page.getContent());
+    }
+
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PutMapping("/exhibitions/admin/{id}")
+    public ResponseEntity<ExhibitionDTO> updateExhibitionByAdmin(@PathVariable(value = "id") final String id, @RequestBody ExhibitionByAdminReq exhibitionByAdminReq) {
+        log.debug("REST request to update Exhibition : {}, {}", id, exhibitionByAdminReq);
+
+        Optional<ExhibitionDTO> result = exhibitionService.updateByAdmin(id, exhibitionByAdminReqMapper.toDto(exhibitionByAdminReq));
+        return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, id));
     }
 
 
