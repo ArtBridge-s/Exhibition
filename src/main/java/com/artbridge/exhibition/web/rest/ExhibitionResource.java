@@ -217,6 +217,15 @@ public class ExhibitionResource {
     }
 
 
+    @PatchMapping("/exhibitions/request/ok/{id}")
+    public ResponseEntity<ExhibitionDTO> requestOk(@PathVariable(value = "id") final String id) {
+        log.debug("REST request to update Exhibition : {}", id);
+
+        Optional<ExhibitionDTO> result = exhibitionService.requestOk(id);
+        return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, id));
+    }
+
+
     /**
      * {@code GET  /exhibitions/:id} : get the "id" exhibition.
      *
