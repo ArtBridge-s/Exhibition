@@ -15,4 +15,9 @@ public class Member implements Serializable {
 
     @Field("member_name")
     private String name;
+
+    public Member(Long id, String login) {
+        this.id = id;
+        this.login = login;
+    }
 }

@@ -68,4 +68,7 @@ public class Exhibition implements Serializable {
     @JsonIgnoreProperties(value = { "artwork" }, allowSetters = true)
     private Set<Like> likes = new HashSet<>();
 
+    public void setCreatedMember(Long id, String login) {
+        this.createdMember = new Member(id, login);
+    }
 }

@@ -10,6 +10,11 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import com.artbridge.exhibition.web.mapper.Exhibition_POST_Req_Mapper;
+import com.artbridge.exhibition.web.request.Exhibition_POST_Req;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
@@ -41,30 +47,32 @@ public class ExhibitionResource {
 
     private final ExhibitionRepository exhibitionRepository;
 
-    public ExhibitionResource(ExhibitionService exhibitionService, ExhibitionRepository exhibitionRepository) {
+
+    private final Exhibition_POST_Req_Mapper exhibitionPostReqMapper;
+
+    public ExhibitionResource(ExhibitionService exhibitionService, ExhibitionRepository exhibitionRepository, Exhibition_POST_Req_Mapper exhibitionPostReqMapper) {
         this.exhibitionService = exhibitionService;
         this.exhibitionRepository = exhibitionRepository;
+        this.exhibitionPostReqMapper = exhibitionPostReqMapper;
     }
 
-    /**
-     * {@code POST  /exhibitions} : Create a new exhibition.
-     *
-     * @param exhibitionDTO the exhibitionDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new exhibitionDTO, or with status {@code 400 (Bad Request)} if the exhibition has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PostMapping("/exhibitions")
-    public ResponseEntity<ExhibitionDTO> createExhibition(@RequestBody ExhibitionDTO exhibitionDTO) throws URISyntaxException {
-        log.debug("REST request to save Exhibition : {}", exhibitionDTO);
-        if (exhibitionDTO.getId() != null) {
-            throw new BadRequestAlertException("A new exhibition cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        ExhibitionDTO result = exhibitionService.save(exhibitionDTO);
+    public ResponseEntity<ExhibitionDTO> createExhibition(@RequestParam("image") MultipartFile file, @RequestParam("exhibition_post_req") String exhibition_post_req_str) throws URISyntaxException, JsonProcessingException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        Exhibition_POST_Req exhibition_post_req = mapper.readValue(exhibition_post_req_str, Exhibition_POST_Req.class);
+
+        log.debug("REST request to save Exhibition : {}", exhibition_post_req);
+
+        ExhibitionDTO exhibitionDTO = exhibitionPostReqMapper.toDto(exhibition_post_req);
+        ExhibitionDTO result = exhibitionService.save(file, exhibitionDTO);
+
         return ResponseEntity
             .created(new URI("/api/exhibitions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
             .body(result);
     }
+
 
     /**
      * {@code PUT  /exhibitions/:id} : Updates an existing exhibition.

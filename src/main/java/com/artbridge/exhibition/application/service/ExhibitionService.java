@@ -5,18 +5,13 @@ import com.artbridge.exhibition.application.dto.ExhibitionDTO;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Service Interface for managing {@link Exhibition}.
  */
 public interface ExhibitionService {
-    /**
-     * Save a exhibition.
-     *
-     * @param exhibitionDTO the entity to save.
-     * @return the persisted entity.
-     */
-    ExhibitionDTO save(ExhibitionDTO exhibitionDTO);
+    ExhibitionDTO save(MultipartFile file, ExhibitionDTO exhibitionDTO);
 
     /**
      * Updates a exhibition.
