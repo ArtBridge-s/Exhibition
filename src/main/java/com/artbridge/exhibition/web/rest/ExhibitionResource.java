@@ -219,11 +219,20 @@ public class ExhibitionResource {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PatchMapping("/exhibitions/request/ok/{id}")
-    public ResponseEntity<ExhibitionDTO> requestOk(@PathVariable(value = "id") final String id) {
+    public ResponseEntity<ExhibitionDTO> requestOk(@PathVariable(value = "id") final String id) { /*TODO*/
         log.debug("REST request to update Exhibition : {}", id);
 
         Optional<ExhibitionDTO> result = exhibitionService.requestOk(id);
         return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, id));
+    }
+
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @DeleteMapping("/exhibitions/authorize/delete/{id}")
+    public ResponseEntity<Void> authorizeDelete(@PathVariable(value = "id") final String id) {
+        log.debug("REST request to delete Exhibition : {}", id);
+        exhibitionService.authorizeDelete(id);
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build();
     }
 
 
