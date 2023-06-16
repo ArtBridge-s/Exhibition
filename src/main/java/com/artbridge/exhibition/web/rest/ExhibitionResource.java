@@ -144,12 +144,7 @@ public class ExhibitionResource {
         );
     }
 
-    /**
-     * {@code GET  /exhibitions} : get all the exhibitions.
-     *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of exhibitions in body.
-     */
+
     @GetMapping("/exhibitions")
     public ResponseEntity<List<ExhibitionDTO>> getAllExhibitions(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Exhibitions");
