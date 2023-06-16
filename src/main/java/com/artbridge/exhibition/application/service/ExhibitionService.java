@@ -63,4 +63,6 @@ public interface ExhibitionService {
     void authorizeDelete(String id);
 
     void deleteByAdmin(String id);
+
+    ExhibitionDTO saveByAdmin(MultipartFile file, ExhibitionDTO exhibitionDTO);
 }
