@@ -11,10 +11,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import com.artbridge.exhibition.web.mapper.Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res_Mapper;
 import com.artbridge.exhibition.web.mapper.Exhibition_GET_LIST_STATUS_OK_Res_Mapper;
 import com.artbridge.exhibition.web.mapper.Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res_Mapper;
 import com.artbridge.exhibition.web.mapper.Exhibition_POST_Req_Mapper;
 import com.artbridge.exhibition.web.request.Exhibition_POST_Req;
+import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res;
 import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_OK_Res;
 import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -55,13 +57,15 @@ public class ExhibitionResource {
     private final Exhibition_POST_Req_Mapper exhibitionPostReqMapper;
     private final Exhibition_GET_LIST_STATUS_OK_Res_Mapper exhibition_get_list_status_ok_res_mapper;
     private final Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res_Mapper exhibitionGetListStatusUploadPendingResMapper;
+    private final Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res_Mapper exhibitionGetListStatusDeletePendingResMapper;
 
-    public ExhibitionResource(ExhibitionService exhibitionService, ExhibitionRepository exhibitionRepository, Exhibition_POST_Req_Mapper exhibitionPostReqMapper, Exhibition_GET_LIST_STATUS_OK_Res_Mapper exhibitionGetListStatusOkResMapper, Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res_Mapper exhibitionGetListStatusUploadPendingResMapper) {
+    public ExhibitionResource(ExhibitionService exhibitionService, ExhibitionRepository exhibitionRepository, Exhibition_POST_Req_Mapper exhibitionPostReqMapper, Exhibition_GET_LIST_STATUS_OK_Res_Mapper exhibitionGetListStatusOkResMapper, Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res_Mapper exhibitionGetListStatusUploadPendingResMapper, Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res_Mapper exhibitionGetListStatusDeletePendingResMapper) {
         this.exhibitionService = exhibitionService;
         this.exhibitionRepository = exhibitionRepository;
         this.exhibitionPostReqMapper = exhibitionPostReqMapper;
         this.exhibition_get_list_status_ok_res_mapper = exhibitionGetListStatusOkResMapper;
         this.exhibitionGetListStatusUploadPendingResMapper = exhibitionGetListStatusUploadPendingResMapper;
+        this.exhibitionGetListStatusDeletePendingResMapper = exhibitionGetListStatusDeletePendingResMapper;
     }
 
     @PostMapping("/exhibitions")
@@ -171,6 +175,16 @@ public class ExhibitionResource {
         Page<ExhibitionDTO> page = exhibitionService.findAllByStatus_upload(pageable);
 
         Page<Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res> exhibition_get_list_status_ok_res_page = page.map(exhibitionGetListStatusUploadPendingResMapper::toRes);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(exhibition_get_list_status_ok_res_page.getContent());
+    }
+
+    @GetMapping("/exhibitions/status/delete")
+    public ResponseEntity<List<Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res>> getAllExhibitionsByStatusDelete(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+        log.debug("REST request to get a page of Exhibitions");
+        Page<ExhibitionDTO> page = exhibitionService.findAllByStatus_delete(pageable);
+
+        Page<Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res> exhibition_get_list_status_ok_res_page = page.map(exhibitionGetListStatusDeletePendingResMapper::toRes);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(exhibition_get_list_status_ok_res_page.getContent());
     }
