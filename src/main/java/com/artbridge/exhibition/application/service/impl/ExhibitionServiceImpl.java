@@ -1,16 +1,21 @@
 package com.artbridge.exhibition.application.service.impl;
 
+import com.artbridge.exhibition.domain.enumeration.Status;
 import com.artbridge.exhibition.domain.model.Exhibition;
+import com.artbridge.exhibition.domain.service.ExhibitionDomainService;
 import com.artbridge.exhibition.infrastructure.repository.ExhibitionRepository;
 import com.artbridge.exhibition.application.service.ExhibitionService;
 import com.artbridge.exhibition.application.dto.ExhibitionDTO;
 import com.artbridge.exhibition.application.mapper.ExhibitionMapper;
+
 import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Service Implementation for managing {@link Exhibition}.
@@ -24,15 +29,24 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 
     private final ExhibitionMapper exhibitionMapper;
 
-    public ExhibitionServiceImpl(ExhibitionRepository exhibitionRepository, ExhibitionMapper exhibitionMapper) {
+    private final ExhibitionDomainService exhibitionDomainService;
+
+
+    public ExhibitionServiceImpl(ExhibitionRepository exhibitionRepository, ExhibitionMapper exhibitionMapper, ExhibitionDomainService exhibitionDomainService) {
         this.exhibitionRepository = exhibitionRepository;
         this.exhibitionMapper = exhibitionMapper;
+        this.exhibitionDomainService = exhibitionDomainService;
     }
 
     @Override
-    public ExhibitionDTO save(ExhibitionDTO exhibitionDTO) {
+    public ExhibitionDTO save(MultipartFile file, ExhibitionDTO exhibitionDTO) {
         log.debug("Request to save Exhibition : {}", exhibitionDTO);
         Exhibition exhibition = exhibitionMapper.toEntity(exhibitionDTO);
+
+        exhibition.setStatus(Status.UPLOAD_PENDING);
+        exhibition = this.exhibitionDomainService.uploadImage(file, exhibition);
+        exhibition = this.exhibitionDomainService.initCreatedMember(exhibition);
+
         exhibition = exhibitionRepository.save(exhibition);
         return exhibitionMapper.toDto(exhibition);
     }
@@ -77,4 +91,5 @@ public class ExhibitionServiceImpl implements ExhibitionService {
         log.debug("Request to delete Exhibition : {}", id);
         exhibitionRepository.deleteById(id);
     }
+
 }
