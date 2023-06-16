@@ -78,63 +78,6 @@ public class ExhibitionResource {
         return ResponseEntity.created(new URI("/api/exhibitions/" + result.getId())).headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId())).body(result);
     }
 
-    /**
-     * {@code PUT  /exhibitions/:id} : Updates an existing exhibition.
-     *
-     * @param id            the id of the exhibitionDTO to save.
-     * @param exhibitionDTO the exhibitionDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated exhibitionDTO,
-     * or with status {@code 400 (Bad Request)} if the exhibitionDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the exhibitionDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PutMapping("/exhibitions/{id}")
-    public ResponseEntity<ExhibitionDTO> updateExhibition(@PathVariable(value = "id", required = false) final String id, @RequestBody ExhibitionDTO exhibitionDTO) throws URISyntaxException {
-        log.debug("REST request to update Exhibition : {}, {}", id, exhibitionDTO);
-        if (exhibitionDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, exhibitionDTO.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!exhibitionRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
-        ExhibitionDTO result = exhibitionService.update(exhibitionDTO);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, exhibitionDTO.getId())).body(result);
-    }
-
-    /**
-     * {@code PATCH  /exhibitions/:id} : Partial updates given fields of an existing exhibition, field will ignore if it is null
-     *
-     * @param id            the id of the exhibitionDTO to save.
-     * @param exhibitionDTO the exhibitionDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated exhibitionDTO,
-     * or with status {@code 400 (Bad Request)} if the exhibitionDTO is not valid,
-     * or with status {@code 404 (Not Found)} if the exhibitionDTO is not found,
-     * or with status {@code 500 (Internal Server Error)} if the exhibitionDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PatchMapping(value = "/exhibitions/{id}", consumes = {"application/json", "application/merge-patch+json"})
-    public ResponseEntity<ExhibitionDTO> partialUpdateExhibition(@PathVariable(value = "id", required = false) final String id, @RequestBody ExhibitionDTO exhibitionDTO) throws URISyntaxException {
-        log.debug("REST request to partial update Exhibition partially : {}, {}", id, exhibitionDTO);
-        if (exhibitionDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, exhibitionDTO.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!exhibitionRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
-        Optional<ExhibitionDTO> result = exhibitionService.partialUpdate(exhibitionDTO);
-
-        return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, exhibitionDTO.getId()));
-    }
 
     @GetMapping("/exhibitions/status/ok")
     public ResponseEntity<List<Exhibition_GET_LIST_STATUS_OK_Res>> getAllExhibitionsByStatusOK(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
