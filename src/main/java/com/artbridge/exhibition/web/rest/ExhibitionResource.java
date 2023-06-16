@@ -208,6 +208,15 @@ public class ExhibitionResource {
     }
 
 
+    @PatchMapping("/exhibitions/request/delete/{id}")
+    public ResponseEntity<ExhibitionDTO> requestDelete(@PathVariable(value = "id") final String id) {
+        log.debug("REST request to update Exhibition : {}", id);
+
+        Optional<ExhibitionDTO> result = exhibitionService.requestDelete(id);
+        return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, id));
+    }
+
+
     /**
      * {@code GET  /exhibitions/:id} : get the "id" exhibition.
      *

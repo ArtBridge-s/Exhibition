@@ -140,4 +140,17 @@ public class ExhibitionServiceImpl implements ExhibitionService {
             .map(exhibitionMapper::toDto);
     }
 
+    @Override
+    public Optional<ExhibitionDTO> requestDelete(String id) {
+        log.debug("Request to update Exhibition : {}", id);
+        return exhibitionRepository
+            .findById(id)
+            .map(existingExhibition -> {
+                existingExhibition.setStatus(Status.DELETE_PENDING);
+                return existingExhibition;
+            })
+            .map(exhibitionRepository::save)
+            .map(exhibitionMapper::toDto);
+    }
+
 }
