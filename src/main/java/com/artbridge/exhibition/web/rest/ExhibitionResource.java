@@ -14,6 +14,7 @@ import java.util.Optional;
 
 import com.artbridge.exhibition.web.mapper.*;
 import com.artbridge.exhibition.web.request.ExhibitionByAdminReq;
+import com.artbridge.exhibition.web.request.ExhibitionRevisionRequest_Req;
 import com.artbridge.exhibition.web.request.Exhibition_POST_Req;
 import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res;
 import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_OK_Res;
@@ -63,6 +64,7 @@ public class ExhibitionResource {
     private final Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res_Mapper exhibitionGetListStatusDeletePendingResMapper;
     private final Exhibition_GET_LIST_STATUS_REVISION_PENDING_Res_Mapper exhibitionGetListStatusRevisionPendingResMapper;
     private final ExhibitionByAdminReq_Mapper exhibitionByAdminReqMapper;
+    private final ExhibitionRevisionRequest_Req_Mapper exhibitionRevisionRequestReqMapper;
 
 
 
@@ -193,6 +195,15 @@ public class ExhibitionResource {
         log.debug("REST request to update Exhibition : {}, {}", id, exhibitionByAdminReq);
 
         Optional<ExhibitionDTO> result = exhibitionService.updateByAdmin(id, exhibitionByAdminReqMapper.toDto(exhibitionByAdminReq));
+        return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, id));
+    }
+
+
+    @PutMapping("/exhibitions/request/revision/{id}")
+    public ResponseEntity<ExhibitionDTO> requestRevision(@PathVariable(value = "id") final String id, @RequestBody ExhibitionRevisionRequest_Req exhibitionRevisionRequestReq) {
+        log.debug("REST request to update Exhibition : {}", id);
+
+        Optional<ExhibitionDTO> result = exhibitionService.requestRevision(id, exhibitionRevisionRequestReqMapper.toDto(exhibitionRevisionRequestReq));
         return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, id));
     }
 

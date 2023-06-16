@@ -126,4 +126,18 @@ public class ExhibitionServiceImpl implements ExhibitionService {
             .map(exhibitionMapper::toDto);
     }
 
+    @Override
+    public Optional<ExhibitionDTO> requestRevision(String id, ExhibitionDTO exhibitionDTO) {
+        log.debug("Request to update Exhibition : {}", exhibitionDTO);
+        return exhibitionRepository
+            .findById(id)
+            .map(existingExhibition -> {
+                exhibitionMapper.partialUpdate(existingExhibition, exhibitionDTO);
+                existingExhibition.setStatus(Status.REVISION_PENDING);
+                return existingExhibition;
+            })
+            .map(exhibitionRepository::save)
+            .map(exhibitionMapper::toDto);
+    }
+
 }
