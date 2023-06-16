@@ -56,4 +56,5 @@ public interface ExhibitionService {
 
     Optional<ExhibitionDTO> requestRevision(String id, ExhibitionDTO dto);
 
+    Optional<ExhibitionDTO> requestDelete(String id);
 }
