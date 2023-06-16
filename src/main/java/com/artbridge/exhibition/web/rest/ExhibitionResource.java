@@ -12,9 +12,11 @@ import java.util.Objects;
 import java.util.Optional;
 
 import com.artbridge.exhibition.web.mapper.Exhibition_GET_LIST_STATUS_OK_Res_Mapper;
+import com.artbridge.exhibition.web.mapper.Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res_Mapper;
 import com.artbridge.exhibition.web.mapper.Exhibition_POST_Req_Mapper;
 import com.artbridge.exhibition.web.request.Exhibition_POST_Req;
 import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_OK_Res;
+import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -52,12 +54,14 @@ public class ExhibitionResource {
 
     private final Exhibition_POST_Req_Mapper exhibitionPostReqMapper;
     private final Exhibition_GET_LIST_STATUS_OK_Res_Mapper exhibition_get_list_status_ok_res_mapper;
+    private final Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res_Mapper exhibitionGetListStatusUploadPendingResMapper;
 
-    public ExhibitionResource(ExhibitionService exhibitionService, ExhibitionRepository exhibitionRepository, Exhibition_POST_Req_Mapper exhibitionPostReqMapper, Exhibition_GET_LIST_STATUS_OK_Res_Mapper exhibitionGetListStatusOkResMapper) {
+    public ExhibitionResource(ExhibitionService exhibitionService, ExhibitionRepository exhibitionRepository, Exhibition_POST_Req_Mapper exhibitionPostReqMapper, Exhibition_GET_LIST_STATUS_OK_Res_Mapper exhibitionGetListStatusOkResMapper, Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res_Mapper exhibitionGetListStatusUploadPendingResMapper) {
         this.exhibitionService = exhibitionService;
         this.exhibitionRepository = exhibitionRepository;
         this.exhibitionPostReqMapper = exhibitionPostReqMapper;
         this.exhibition_get_list_status_ok_res_mapper = exhibitionGetListStatusOkResMapper;
+        this.exhibitionGetListStatusUploadPendingResMapper = exhibitionGetListStatusUploadPendingResMapper;
     }
 
     @PostMapping("/exhibitions")
@@ -159,6 +163,18 @@ public class ExhibitionResource {
         return ResponseEntity.ok().headers(headers).body(exhibition_get_list_status_ok_res_page.getContent());
 
     }
+
+
+    @GetMapping("/exhibitions/pendings")
+    public ResponseEntity<List<Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res>> getAllExhibitionsByStatusUpload(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+        log.debug("REST request to get a page of Exhibitions");
+        Page<ExhibitionDTO> page = exhibitionService.findAllByStatusPending(pageable);
+
+        Page<Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res> exhibition_get_list_status_ok_res_page = page.map(exhibitionGetListStatusUploadPendingResMapper::toRes);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(exhibition_get_list_status_ok_res_page.getContent());
+    }
+
 
     /**
      * {@code GET  /exhibitions/:id} : get the "id" exhibition.
