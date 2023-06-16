@@ -1,22 +1,23 @@
 package com.artbridge.exhibition.domain.service;
 
+import com.artbridge.exhibition.domain.exception.CurrentTokenNotAvailableException;
+import com.artbridge.exhibition.domain.exception.FileNotFoundException;
 import com.artbridge.exhibition.domain.model.Exhibition;
 import com.artbridge.exhibition.infrastructure.gcs.GCSService;
 import com.artbridge.exhibition.infrastructure.security.SecurityUtils;
 import com.artbridge.exhibition.infrastructure.security.jwt.TokenProvider;
-import com.artbridge.exhibition.web.errors.BadRequestAlertException;
+import java.io.IOException;
+import java.util.Objects;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.Objects;
-import java.util.Optional;
-
 @Slf4j
 @Service
 public class ExhibitionDomainServiceImpl implements ExhibitionDomainService {
+
     private final GCSService gcsService;
     private final TokenProvider tokenProvider;
 
@@ -33,7 +34,7 @@ public class ExhibitionDomainServiceImpl implements ExhibitionDomainService {
                 String imgUrl = this.gcsService.uploadImageToGCS(file);
                 exhibition.setImgUrl(imgUrl);
             } catch (IOException e) {
-                throw new BadRequestAlertException("File upload failed", "Exhibition", "filereadfailed");
+                throw new FileNotFoundException("File upload failed", "Exhibition", "filereadfailed");
             }
         }
         return exhibition;
@@ -43,7 +44,7 @@ public class ExhibitionDomainServiceImpl implements ExhibitionDomainService {
     public Exhibition initCreatedMember(Exhibition exhibition) {
         Optional<String> optToken = SecurityUtils.getCurrentUserJWT();
         if (optToken.isEmpty() || !this.tokenProvider.validateToken(optToken.get())) {
-            throw new BadRequestAlertException("Invalid token", "Exhibition", "invalidtoken");
+            throw new CurrentTokenNotAvailableException("Invalid token", "Exhibition", "invalidtoken");
         }
 
         Authentication authentication = this.tokenProvider.getAuthentication(optToken.get());
@@ -55,5 +56,4 @@ public class ExhibitionDomainServiceImpl implements ExhibitionDomainService {
 
         return exhibition;
     }
-
 }
