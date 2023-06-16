@@ -115,9 +115,15 @@ public class ExhibitionServiceImpl implements ExhibitionService {
     @Override
     public Optional<ExhibitionDTO> updateByAdmin(String id, ExhibitionDTO exhibitionDTO) {
         log.debug("Request to update Exhibition : {}", exhibitionDTO);
-        Exhibition exhibition = exhibitionMapper.toEntity(exhibitionDTO);
-        exhibition = exhibitionRepository.save(exhibition);
-        return Optional.of(exhibitionMapper.toDto(exhibition));
+        return exhibitionRepository
+            .findById(id)
+            .map(existingExhibition -> {
+                exhibitionMapper.partialUpdate(existingExhibition, exhibitionDTO);
+
+                return existingExhibition;
+            })
+            .map(exhibitionRepository::save)
+            .map(exhibitionMapper::toDto);
     }
 
 }
