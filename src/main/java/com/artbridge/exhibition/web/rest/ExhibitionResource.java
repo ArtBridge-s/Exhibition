@@ -11,8 +11,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import com.artbridge.exhibition.web.mapper.Exhibition_GET_LIST_STATUS_OK_Res_Mapper;
 import com.artbridge.exhibition.web.mapper.Exhibition_POST_Req_Mapper;
 import com.artbridge.exhibition.web.request.Exhibition_POST_Req;
+import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_OK_Res;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -49,11 +51,13 @@ public class ExhibitionResource {
 
 
     private final Exhibition_POST_Req_Mapper exhibitionPostReqMapper;
+    private final Exhibition_GET_LIST_STATUS_OK_Res_Mapper exhibition_get_list_status_ok_res_mapper;
 
-    public ExhibitionResource(ExhibitionService exhibitionService, ExhibitionRepository exhibitionRepository, Exhibition_POST_Req_Mapper exhibitionPostReqMapper) {
+    public ExhibitionResource(ExhibitionService exhibitionService, ExhibitionRepository exhibitionRepository, Exhibition_POST_Req_Mapper exhibitionPostReqMapper, Exhibition_GET_LIST_STATUS_OK_Res_Mapper exhibitionGetListStatusOkResMapper) {
         this.exhibitionService = exhibitionService;
         this.exhibitionRepository = exhibitionRepository;
         this.exhibitionPostReqMapper = exhibitionPostReqMapper;
+        this.exhibition_get_list_status_ok_res_mapper = exhibitionGetListStatusOkResMapper;
     }
 
     @PostMapping("/exhibitions")
@@ -146,11 +150,14 @@ public class ExhibitionResource {
 
 
     @GetMapping("/exhibitions")
-    public ResponseEntity<List<ExhibitionDTO>> getAllExhibitions(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<Exhibition_GET_LIST_STATUS_OK_Res>> getAllExhibitionsByStatusOK(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Exhibitions");
-        Page<ExhibitionDTO> page = exhibitionService.findAll(pageable);
+        Page<ExhibitionDTO> page = exhibitionService.findAllByStatus(pageable);
+
+        Page<Exhibition_GET_LIST_STATUS_OK_Res> exhibition_get_list_status_ok_res_page = page.map(exhibition_get_list_status_ok_res_mapper::toRes);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+        return ResponseEntity.ok().headers(headers).body(exhibition_get_list_status_ok_res_page.getContent());
+
     }
 
     /**
