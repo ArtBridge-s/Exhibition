@@ -52,4 +52,6 @@ public interface ExhibitionService {
 
     Page<ExhibitionDTO> findAllByStatus_delete(Pageable pageable);
 
+    Optional<ExhibitionDTO> updateByAdmin(String id, ExhibitionDTO exhibitionDTO);
+
 }
