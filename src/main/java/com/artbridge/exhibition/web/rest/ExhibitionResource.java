@@ -15,11 +15,13 @@ import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_REVISION
 import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,10 +66,7 @@ public class ExhibitionResource {
     private final ExhibitionRevisionRequest_Req_Mapper exhibitionRevisionRequestReqMapper;
 
     @PostMapping("/exhibitions")
-    public ResponseEntity<ExhibitionDTO> createExhibition(
-        @RequestParam("image") MultipartFile file,
-        @RequestParam("exhibition_post_req") String exhibition_post_req_str
-    ) throws URISyntaxException, JsonProcessingException {
+    public ResponseEntity<ExhibitionDTO> createExhibition(@RequestParam("image") MultipartFile file, @RequestParam("exhibition_post_req") String exhibition_post_req_str) throws URISyntaxException, JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Exhibition_POST_Req exhibition_post_req = mapper.readValue(exhibition_post_req_str, Exhibition_POST_Req.class);
 
@@ -76,10 +75,7 @@ public class ExhibitionResource {
         ExhibitionDTO exhibitionDTO = exhibitionPostReqMapper.toDto(exhibition_post_req);
         ExhibitionDTO result = exhibitionService.save(file, exhibitionDTO);
 
-        return ResponseEntity
-            .created(new URI("/api/exhibitions/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
-            .body(result);
+        return ResponseEntity.created(new URI("/api/exhibitions/" + result.getId())).headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId())).body(result);
     }
 
     /**
@@ -93,10 +89,7 @@ public class ExhibitionResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/exhibitions/{id}")
-    public ResponseEntity<ExhibitionDTO> updateExhibition(
-        @PathVariable(value = "id", required = false) final String id,
-        @RequestBody ExhibitionDTO exhibitionDTO
-    ) throws URISyntaxException {
+    public ResponseEntity<ExhibitionDTO> updateExhibition(@PathVariable(value = "id", required = false) final String id, @RequestBody ExhibitionDTO exhibitionDTO) throws URISyntaxException {
         log.debug("REST request to update Exhibition : {}, {}", id, exhibitionDTO);
         if (exhibitionDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -110,10 +103,7 @@ public class ExhibitionResource {
         }
 
         ExhibitionDTO result = exhibitionService.update(exhibitionDTO);
-        return ResponseEntity
-            .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, exhibitionDTO.getId()))
-            .body(result);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, exhibitionDTO.getId())).body(result);
     }
 
     /**
@@ -127,11 +117,8 @@ public class ExhibitionResource {
      * or with status {@code 500 (Internal Server Error)} if the exhibitionDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/exhibitions/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<ExhibitionDTO> partialUpdateExhibition(
-        @PathVariable(value = "id", required = false) final String id,
-        @RequestBody ExhibitionDTO exhibitionDTO
-    ) throws URISyntaxException {
+    @PatchMapping(value = "/exhibitions/{id}", consumes = {"application/json", "application/merge-patch+json"})
+    public ResponseEntity<ExhibitionDTO> partialUpdateExhibition(@PathVariable(value = "id", required = false) final String id, @RequestBody ExhibitionDTO exhibitionDTO) throws URISyntaxException {
         log.debug("REST request to partial update Exhibition partially : {}, {}", id, exhibitionDTO);
         if (exhibitionDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -146,77 +133,55 @@ public class ExhibitionResource {
 
         Optional<ExhibitionDTO> result = exhibitionService.partialUpdate(exhibitionDTO);
 
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, exhibitionDTO.getId())
-        );
+        return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, exhibitionDTO.getId()));
     }
 
     @GetMapping("/exhibitions/status/ok")
-    public ResponseEntity<List<Exhibition_GET_LIST_STATUS_OK_Res>> getAllExhibitionsByStatusOK(
-        @org.springdoc.api.annotations.ParameterObject Pageable pageable
-    ) {
+    public ResponseEntity<List<Exhibition_GET_LIST_STATUS_OK_Res>> getAllExhibitionsByStatusOK(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Exhibitions");
         Page<ExhibitionDTO> page = exhibitionService.findAllByStatus_ok(pageable);
 
-        Page<Exhibition_GET_LIST_STATUS_OK_Res> exhibition_get_list_status_ok_res_page = page.map(
-            exhibitionGetListStatusOkResMapper::toRes
-        );
+        Page<Exhibition_GET_LIST_STATUS_OK_Res> exhibition_get_list_status_ok_res_page = page.map(exhibitionGetListStatusOkResMapper::toRes);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(exhibition_get_list_status_ok_res_page.getContent());
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/exhibitions/status/upload")
-    public ResponseEntity<List<Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res>> getAllExhibitionsByStatusUpload(
-        @org.springdoc.api.annotations.ParameterObject Pageable pageable
-    ) {
+    public ResponseEntity<List<Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res>> getAllExhibitionsByStatusUpload(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Exhibitions");
         Page<ExhibitionDTO> page = exhibitionService.findAllByStatus_upload(pageable);
 
-        Page<Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res> exhibitionGetListStatusUploadPendingRes = page.map(
-            exhibitionGetListStatusUploadPendingResMapper::toRes
-        );
+        Page<Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res> exhibitionGetListStatusUploadPendingRes = page.map(exhibitionGetListStatusUploadPendingResMapper::toRes);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(exhibitionGetListStatusUploadPendingRes.getContent());
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/exhibitions/status/revision")
-    public ResponseEntity<List<Exhibition_GET_LIST_STATUS_REVISION_PENDING_Res>> getAllExhibitionsByStatusRevision(
-        @org.springdoc.api.annotations.ParameterObject Pageable pageable
-    ) {
+    public ResponseEntity<List<Exhibition_GET_LIST_STATUS_REVISION_PENDING_Res>> getAllExhibitionsByStatusRevision(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Exhibitions");
         Page<ExhibitionDTO> page = exhibitionService.findAllByStatus_revision(pageable);
 
-        Page<Exhibition_GET_LIST_STATUS_REVISION_PENDING_Res> exhibitionGetListStatusRevisionPendingRes = page.map(
-            exhibitionGetListStatusRevisionPendingResMapper::toRes
-        );
+        Page<Exhibition_GET_LIST_STATUS_REVISION_PENDING_Res> exhibitionGetListStatusRevisionPendingRes = page.map(exhibitionGetListStatusRevisionPendingResMapper::toRes);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(exhibitionGetListStatusRevisionPendingRes.getContent());
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/exhibitions/status/delete")
-    public ResponseEntity<List<Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res>> getAllExhibitionsByStatusDelete(
-        @org.springdoc.api.annotations.ParameterObject Pageable pageable
-    ) {
+    public ResponseEntity<List<Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res>> getAllExhibitionsByStatusDelete(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Exhibitions");
         Page<ExhibitionDTO> page = exhibitionService.findAllByStatus_delete(pageable);
 
-        Page<Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res> exhibition_get_list_status_ok_res_page = page.map(
-            exhibitionGetListStatusDeletePendingResMapper::toRes
-        );
+        Page<Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res> exhibition_get_list_status_ok_res_page = page.map(exhibitionGetListStatusDeletePendingResMapper::toRes);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(exhibition_get_list_status_ok_res_page.getContent());
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PutMapping("/exhibitions/admin/{id}")
-    public ResponseEntity<ExhibitionDTO> updateExhibitionByAdmin(
-        @PathVariable(value = "id") final String id,
-        @RequestBody ExhibitionByAdminReq exhibitionByAdminReq
-    ) {
+    public ResponseEntity<ExhibitionDTO> updateExhibitionByAdmin(@PathVariable(value = "id") final String id, @RequestBody ExhibitionByAdminReq exhibitionByAdminReq) {
         log.debug("REST request to update Exhibition : {}, {}", id, exhibitionByAdminReq);
 
         Optional<ExhibitionDTO> result = exhibitionService.updateByAdmin(id, exhibitionByAdminReqMapper.toDto(exhibitionByAdminReq));
@@ -224,16 +189,10 @@ public class ExhibitionResource {
     }
 
     @PutMapping("/exhibitions/request/revision/{id}")
-    public ResponseEntity<ExhibitionDTO> requestRevision(
-        @PathVariable(value = "id") final String id,
-        @RequestBody ExhibitionRevisionRequest_Req exhibitionRevisionRequestReq
-    ) {
+    public ResponseEntity<ExhibitionDTO> requestRevision(@PathVariable(value = "id") final String id, @RequestBody ExhibitionRevisionRequest_Req exhibitionRevisionRequestReq) {
         log.debug("REST request to update Exhibition : {}", id);
 
-        Optional<ExhibitionDTO> result = exhibitionService.requestRevision(
-            id,
-            exhibitionRevisionRequestReqMapper.toDto(exhibitionRevisionRequestReq)
-        );
+        Optional<ExhibitionDTO> result = exhibitionService.requestRevision(id, exhibitionRevisionRequestReqMapper.toDto(exhibitionRevisionRequestReq));
         return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, id));
     }
 
