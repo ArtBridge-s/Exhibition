@@ -75,9 +75,9 @@ public class ExhibitionServiceImpl implements ExhibitionService {
     }
 
     @Override
-    public Page<ExhibitionDTO> findAll(Pageable pageable) {
-        log.debug("Request to get all Exhibitions");
-        return exhibitionRepository.findAll(pageable).map(exhibitionMapper::toDto);
+    public Page<ExhibitionDTO> findAllByStatus(Pageable pageable) {
+        log.debug("Status가 OK인 모든 전시회를 가져옵니다.");
+        return exhibitionRepository.findAllByStatus(Status.OK, pageable).map(exhibitionMapper::toDto);
     }
 
     @Override
