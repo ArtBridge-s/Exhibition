@@ -74,11 +74,6 @@ public class ExhibitionServiceImpl implements ExhibitionService {
             .map(exhibitionMapper::toDto);
     }
 
-    @Override
-    public Page<ExhibitionDTO> findAllByStatus(Pageable pageable) {
-        log.debug("Status가 OK인 모든 전시회를 가져옵니다.");
-        return exhibitionRepository.findAllByStatus(Status.OK, pageable).map(exhibitionMapper::toDto);
-    }
 
     @Override
     public Optional<ExhibitionDTO> findOne(String id) {
@@ -90,6 +85,19 @@ public class ExhibitionServiceImpl implements ExhibitionService {
     public void delete(String id) {
         log.debug("Request to delete Exhibition : {}", id);
         exhibitionRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<ExhibitionDTO> findAllByStatus_ok(Pageable pageable) {
+        log.debug("Status가 OK인 모든 전시회를 가져옵니다.");
+        return exhibitionRepository.findAllByStatus(Status.OK, pageable).map(exhibitionMapper::toDto);
+    }
+
+
+    @Override
+    public Page<ExhibitionDTO> findAllByStatus_upload(Pageable pageable) {
+        log.debug("Status가 UPLOAD_PENDING인 모든 전시회를 가져옵니다.");
+        return exhibitionRepository.findAllByStatus(Status.UPLOAD_PENDING, pageable).map(exhibitionMapper::toDto);
     }
 
 }

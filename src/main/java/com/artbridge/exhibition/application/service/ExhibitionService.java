@@ -29,7 +29,7 @@ public interface ExhibitionService {
      */
     Optional<ExhibitionDTO> partialUpdate(ExhibitionDTO exhibitionDTO);
 
-    Page<ExhibitionDTO> findAllByStatus(Pageable pageable);
+    Page<ExhibitionDTO> findAllByStatus_ok(Pageable pageable);
 
     /**
      * Get the "id" exhibition.
@@ -45,4 +45,7 @@ public interface ExhibitionService {
      * @param id the id of the entity.
      */
     void delete(String id);
+
+    Page<ExhibitionDTO> findAllByStatus_upload(Pageable pageable);
+
 }
