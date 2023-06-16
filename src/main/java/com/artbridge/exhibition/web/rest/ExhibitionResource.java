@@ -5,6 +5,7 @@ import com.artbridge.exhibition.infrastructure.repository.ExhibitionRepository;
 import com.artbridge.exhibition.application.service.ExhibitionService;
 import com.artbridge.exhibition.application.dto.ExhibitionDTO;
 import com.artbridge.exhibition.web.errors.BadRequestAlertException;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import com.artbridge.exhibition.web.mapper.*;
+import com.artbridge.exhibition.web.request.ExhibitionByAdminReq;
 import com.artbridge.exhibition.web.request.Exhibition_POST_Req;
 import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res;
 import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_OK_Res;
@@ -56,10 +58,12 @@ public class ExhibitionResource {
 
 
     private final Exhibition_POST_Req_Mapper exhibitionPostReqMapper;
-    private final Exhibition_GET_LIST_STATUS_OK_Res_Mapper exhibition_get_list_status_ok_res_mapper;
+    private final Exhibition_GET_LIST_STATUS_OK_Res_Mapper exhibitionGetListStatusOkResMapper;
     private final Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res_Mapper exhibitionGetListStatusUploadPendingResMapper;
     private final Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res_Mapper exhibitionGetListStatusDeletePendingResMapper;
     private final Exhibition_GET_LIST_STATUS_REVISION_PENDING_Res_Mapper exhibitionGetListStatusRevisionPendingResMapper;
+    private final ExhibitionByAdminReq_Mapper exhibitionByAdminReqMapper;
+
 
 
     @PostMapping("/exhibitions")
@@ -73,17 +77,14 @@ public class ExhibitionResource {
         ExhibitionDTO exhibitionDTO = exhibitionPostReqMapper.toDto(exhibition_post_req);
         ExhibitionDTO result = exhibitionService.save(file, exhibitionDTO);
 
-        return ResponseEntity
-            .created(new URI("/api/exhibitions/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
-            .body(result);
+        return ResponseEntity.created(new URI("/api/exhibitions/" + result.getId())).headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId())).body(result);
     }
 
 
     /**
      * {@code PUT  /exhibitions/:id} : Updates an existing exhibition.
      *
-     * @param id the id of the exhibitionDTO to save.
+     * @param id            the id of the exhibitionDTO to save.
      * @param exhibitionDTO the exhibitionDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated exhibitionDTO,
      * or with status {@code 400 (Bad Request)} if the exhibitionDTO is not valid,
@@ -91,10 +92,7 @@ public class ExhibitionResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/exhibitions/{id}")
-    public ResponseEntity<ExhibitionDTO> updateExhibition(
-        @PathVariable(value = "id", required = false) final String id,
-        @RequestBody ExhibitionDTO exhibitionDTO
-    ) throws URISyntaxException {
+    public ResponseEntity<ExhibitionDTO> updateExhibition(@PathVariable(value = "id", required = false) final String id, @RequestBody ExhibitionDTO exhibitionDTO) throws URISyntaxException {
         log.debug("REST request to update Exhibition : {}, {}", id, exhibitionDTO);
         if (exhibitionDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -108,16 +106,13 @@ public class ExhibitionResource {
         }
 
         ExhibitionDTO result = exhibitionService.update(exhibitionDTO);
-        return ResponseEntity
-            .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, exhibitionDTO.getId()))
-            .body(result);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, exhibitionDTO.getId())).body(result);
     }
 
     /**
      * {@code PATCH  /exhibitions/:id} : Partial updates given fields of an existing exhibition, field will ignore if it is null
      *
-     * @param id the id of the exhibitionDTO to save.
+     * @param id            the id of the exhibitionDTO to save.
      * @param exhibitionDTO the exhibitionDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated exhibitionDTO,
      * or with status {@code 400 (Bad Request)} if the exhibitionDTO is not valid,
@@ -125,11 +120,8 @@ public class ExhibitionResource {
      * or with status {@code 500 (Internal Server Error)} if the exhibitionDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/exhibitions/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<ExhibitionDTO> partialUpdateExhibition(
-        @PathVariable(value = "id", required = false) final String id,
-        @RequestBody ExhibitionDTO exhibitionDTO
-    ) throws URISyntaxException {
+    @PatchMapping(value = "/exhibitions/{id}", consumes = {"application/json", "application/merge-patch+json"})
+    public ResponseEntity<ExhibitionDTO> partialUpdateExhibition(@PathVariable(value = "id", required = false) final String id, @RequestBody ExhibitionDTO exhibitionDTO) throws URISyntaxException {
         log.debug("REST request to partial update Exhibition partially : {}, {}", id, exhibitionDTO);
         if (exhibitionDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -144,10 +136,7 @@ public class ExhibitionResource {
 
         Optional<ExhibitionDTO> result = exhibitionService.partialUpdate(exhibitionDTO);
 
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, exhibitionDTO.getId())
-        );
+        return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, exhibitionDTO.getId()));
     }
 
 
@@ -156,7 +145,7 @@ public class ExhibitionResource {
         log.debug("REST request to get a page of Exhibitions");
         Page<ExhibitionDTO> page = exhibitionService.findAllByStatus_ok(pageable);
 
-        Page<Exhibition_GET_LIST_STATUS_OK_Res> exhibition_get_list_status_ok_res_page = page.map(exhibition_get_list_status_ok_res_mapper::toRes);
+        Page<Exhibition_GET_LIST_STATUS_OK_Res> exhibition_get_list_status_ok_res_page = page.map(exhibitionGetListStatusOkResMapper::toRes);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(exhibition_get_list_status_ok_res_page.getContent());
 
@@ -195,6 +184,16 @@ public class ExhibitionResource {
         Page<Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res> exhibition_get_list_status_ok_res_page = page.map(exhibitionGetListStatusDeletePendingResMapper::toRes);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(exhibition_get_list_status_ok_res_page.getContent());
+    }
+
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PutMapping("/exhibitions/admin/{id}")
+    public ResponseEntity<ExhibitionDTO> updateExhibitionByAdmin(@PathVariable(value = "id") final String id, @RequestBody ExhibitionByAdminReq exhibitionByAdminReq) {
+        log.debug("REST request to update Exhibition : {}, {}", id, exhibitionByAdminReq);
+
+        Optional<ExhibitionDTO> result = exhibitionService.updateByAdmin(id, exhibitionByAdminReqMapper.toDto(exhibitionByAdminReq));
+        return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, id));
     }
 
 

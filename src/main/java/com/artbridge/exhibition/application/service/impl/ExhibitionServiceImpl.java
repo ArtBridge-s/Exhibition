@@ -112,4 +112,18 @@ public class ExhibitionServiceImpl implements ExhibitionService {
         return exhibitionRepository.findAllByStatus(Status.DELETE_PENDING, pageable).map(exhibitionMapper::toDto);
     }
 
+    @Override
+    public Optional<ExhibitionDTO> updateByAdmin(String id, ExhibitionDTO exhibitionDTO) {
+        log.debug("Request to update Exhibition : {}", exhibitionDTO);
+        return exhibitionRepository
+            .findById(id)
+            .map(existingExhibition -> {
+                exhibitionMapper.partialUpdate(existingExhibition, exhibitionDTO);
+
+                return existingExhibition;
+            })
+            .map(exhibitionRepository::save)
+            .map(exhibitionMapper::toDto);
+    }
+
 }
