@@ -153,7 +153,7 @@ public class ExhibitionResource {
     }
 
 
-    @GetMapping("/exhibitions")
+    @GetMapping("/exhibitions/status/ok")
     public ResponseEntity<List<Exhibition_GET_LIST_STATUS_OK_Res>> getAllExhibitionsByStatusOK(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Exhibitions");
         Page<ExhibitionDTO> page = exhibitionService.findAllByStatus_ok(pageable);
@@ -165,7 +165,7 @@ public class ExhibitionResource {
     }
 
 
-    @GetMapping("/exhibitions/pendings")
+    @GetMapping("/exhibitions/status/upload")
     public ResponseEntity<List<Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res>> getAllExhibitionsByStatusUpload(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Exhibitions");
         Page<ExhibitionDTO> page = exhibitionService.findAllByStatus_upload(pageable);
