@@ -5,6 +5,7 @@ import com.artbridge.exhibition.infrastructure.repository.ExhibitionRepository;
 import com.artbridge.exhibition.application.service.ExhibitionService;
 import com.artbridge.exhibition.application.dto.ExhibitionDTO;
 import com.artbridge.exhibition.web.errors.BadRequestAlertException;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -73,17 +74,14 @@ public class ExhibitionResource {
         ExhibitionDTO exhibitionDTO = exhibitionPostReqMapper.toDto(exhibition_post_req);
         ExhibitionDTO result = exhibitionService.save(file, exhibitionDTO);
 
-        return ResponseEntity
-            .created(new URI("/api/exhibitions/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
-            .body(result);
+        return ResponseEntity.created(new URI("/api/exhibitions/" + result.getId())).headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId())).body(result);
     }
 
 
     /**
      * {@code PUT  /exhibitions/:id} : Updates an existing exhibition.
      *
-     * @param id the id of the exhibitionDTO to save.
+     * @param id            the id of the exhibitionDTO to save.
      * @param exhibitionDTO the exhibitionDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated exhibitionDTO,
      * or with status {@code 400 (Bad Request)} if the exhibitionDTO is not valid,
@@ -91,10 +89,7 @@ public class ExhibitionResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/exhibitions/{id}")
-    public ResponseEntity<ExhibitionDTO> updateExhibition(
-        @PathVariable(value = "id", required = false) final String id,
-        @RequestBody ExhibitionDTO exhibitionDTO
-    ) throws URISyntaxException {
+    public ResponseEntity<ExhibitionDTO> updateExhibition(@PathVariable(value = "id", required = false) final String id, @RequestBody ExhibitionDTO exhibitionDTO) throws URISyntaxException {
         log.debug("REST request to update Exhibition : {}, {}", id, exhibitionDTO);
         if (exhibitionDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -108,16 +103,13 @@ public class ExhibitionResource {
         }
 
         ExhibitionDTO result = exhibitionService.update(exhibitionDTO);
-        return ResponseEntity
-            .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, exhibitionDTO.getId()))
-            .body(result);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, exhibitionDTO.getId())).body(result);
     }
 
     /**
      * {@code PATCH  /exhibitions/:id} : Partial updates given fields of an existing exhibition, field will ignore if it is null
      *
-     * @param id the id of the exhibitionDTO to save.
+     * @param id            the id of the exhibitionDTO to save.
      * @param exhibitionDTO the exhibitionDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated exhibitionDTO,
      * or with status {@code 400 (Bad Request)} if the exhibitionDTO is not valid,
@@ -125,11 +117,8 @@ public class ExhibitionResource {
      * or with status {@code 500 (Internal Server Error)} if the exhibitionDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/exhibitions/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<ExhibitionDTO> partialUpdateExhibition(
-        @PathVariable(value = "id", required = false) final String id,
-        @RequestBody ExhibitionDTO exhibitionDTO
-    ) throws URISyntaxException {
+    @PatchMapping(value = "/exhibitions/{id}", consumes = {"application/json", "application/merge-patch+json"})
+    public ResponseEntity<ExhibitionDTO> partialUpdateExhibition(@PathVariable(value = "id", required = false) final String id, @RequestBody ExhibitionDTO exhibitionDTO) throws URISyntaxException {
         log.debug("REST request to partial update Exhibition partially : {}, {}", id, exhibitionDTO);
         if (exhibitionDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -144,10 +133,7 @@ public class ExhibitionResource {
 
         Optional<ExhibitionDTO> result = exhibitionService.partialUpdate(exhibitionDTO);
 
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, exhibitionDTO.getId())
-        );
+        return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, exhibitionDTO.getId()));
     }
 
 
