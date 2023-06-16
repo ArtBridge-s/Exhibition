@@ -172,4 +172,10 @@ public class ExhibitionServiceImpl implements ExhibitionService {
         exhibitionRepository.deleteById(id);
     }
 
+    @Override
+    public void deleteByAdmin(String id) {
+        log.debug("Request to delete Exhibition by Admin: {}", id);
+        exhibitionRepository.deleteById(id);
+    }
+
 }

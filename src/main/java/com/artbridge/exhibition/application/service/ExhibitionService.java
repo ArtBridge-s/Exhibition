@@ -61,4 +61,6 @@ public interface ExhibitionService {
     Optional<ExhibitionDTO> requestOk(String id);
 
     void authorizeDelete(String id);
+
+    void deleteByAdmin(String id);
 }
