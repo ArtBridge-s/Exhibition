@@ -76,9 +76,9 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 
 
     @Override
-    public Optional<ExhibitionDTO> findOne(String id) {
+    public Optional<ExhibitionDTO> findOneStatusOK(String id) {
         log.debug("Request to get Exhibition : {}", id);
-        return exhibitionRepository.findById(id).map(exhibitionMapper::toDto);
+        return exhibitionRepository.findByIdAndStatus(id, Status.OK).map(exhibitionMapper::toDto);
     }
 
     @Override

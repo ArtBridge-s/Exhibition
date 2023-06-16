@@ -37,7 +37,7 @@ public interface ExhibitionService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    Optional<ExhibitionDTO> findOne(String id);
+    Optional<ExhibitionDTO> findOneStatusOK(String id);
 
     /**
      * Delete the "id" exhibition.
