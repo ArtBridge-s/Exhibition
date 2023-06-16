@@ -123,6 +123,20 @@ public class ExhibitionResource {
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PostMapping("/exhibitions/admin")
+    public ResponseEntity<ExhibitionDTO> createExhibitionByAdmin(@RequestParam("image") MultipartFile file, @RequestParam("exhibition_post_req") String exhibition_post_req_str) throws URISyntaxException, JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Exhibition_POST_Req exhibition_post_req = mapper.readValue(exhibition_post_req_str, Exhibition_POST_Req.class);
+
+        log.debug("REST request to save Exhibition : {}", exhibition_post_req);
+
+        ExhibitionDTO exhibitionDTO = exhibitionPostReqMapper.toDto(exhibition_post_req);
+        ExhibitionDTO result = exhibitionService.saveByAdmin(file, exhibitionDTO);
+
+        return ResponseEntity.created(new URI("/api/exhibitions/" + result.getId())).headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId())).body(result);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PutMapping("/exhibitions/admin/{id}")
     public ResponseEntity<ExhibitionDTO> updateExhibitionByAdmin(@PathVariable(value = "id") final String id, @RequestBody ExhibitionByAdminReq exhibitionByAdminReq) {
         log.debug("REST request to update Exhibition : {}, {}", id, exhibitionByAdminReq);
