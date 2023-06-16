@@ -28,6 +28,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -168,7 +169,7 @@ public class ExhibitionResource {
 
     }
 
-
+    @PreAuthorize("hasAnyRole(AuthoritiesConstants.ADMIN)")
     @GetMapping("/exhibitions/status/upload")
     public ResponseEntity<List<Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res>> getAllExhibitionsByStatusUpload(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Exhibitions");
@@ -179,6 +180,7 @@ public class ExhibitionResource {
         return ResponseEntity.ok().headers(headers).body(exhibition_get_list_status_ok_res_page.getContent());
     }
 
+    @PreAuthorize("hasAnyRole(AuthoritiesConstants.ADMIN)")
     @GetMapping("/exhibitions/status/delete")
     public ResponseEntity<List<Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res>> getAllExhibitionsByStatusDelete(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Exhibitions");
