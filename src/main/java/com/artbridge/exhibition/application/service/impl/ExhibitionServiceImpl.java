@@ -168,7 +168,7 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 
     @Override
     public void authorizeDelete(String id) {
-        log.debug("Request to delete Exhibition : {}", id);
+        log.debug("Request to delete Exhibition : {}", id); /*TODO*/
         exhibitionRepository.deleteById(id);
     }
 
@@ -176,6 +176,19 @@ public class ExhibitionServiceImpl implements ExhibitionService {
     public void deleteByAdmin(String id) {
         log.debug("Request to delete Exhibition by Admin: {}", id);
         exhibitionRepository.deleteById(id);
+    }
+
+    @Override
+    public ExhibitionDTO saveByAdmin(MultipartFile file, ExhibitionDTO exhibitionDTO) {
+        log.debug("Request to save Exhibition by Admin: {}", exhibitionDTO);
+        Exhibition exhibition = exhibitionMapper.toEntity(exhibitionDTO);
+
+        exhibition.setStatus(Status.OK);
+        exhibition = this.exhibitionDomainService.uploadImage(file, exhibition);
+        exhibition = this.exhibitionDomainService.initCreatedMember(exhibition);
+
+        exhibition = exhibitionRepository.save(exhibition);
+        return exhibitionMapper.toDto(exhibition);
     }
 
 }
