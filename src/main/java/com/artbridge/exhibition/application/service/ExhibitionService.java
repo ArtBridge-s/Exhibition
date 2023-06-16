@@ -45,4 +45,7 @@ public interface ExhibitionService {
      * @param id the id of the entity.
      */
     void delete(String id);
+
+    Page<ExhibitionDTO> findAllByStatusPending(Pageable pageable);
+
 }
