@@ -11,16 +11,15 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.artbridge.exhibition.web.mapper.Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res_Mapper;
-import com.artbridge.exhibition.web.mapper.Exhibition_GET_LIST_STATUS_OK_Res_Mapper;
-import com.artbridge.exhibition.web.mapper.Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res_Mapper;
-import com.artbridge.exhibition.web.mapper.Exhibition_POST_Req_Mapper;
+import com.artbridge.exhibition.web.mapper.*;
 import com.artbridge.exhibition.web.request.Exhibition_POST_Req;
 import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res;
 import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_OK_Res;
+import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_REVISION_PENDING_Res;
 import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,6 +39,7 @@ import tech.jhipster.web.util.ResponseUtil;
  * REST controller for managing {@link Exhibition}.
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api")
 public class ExhibitionResource {
 
@@ -59,15 +59,8 @@ public class ExhibitionResource {
     private final Exhibition_GET_LIST_STATUS_OK_Res_Mapper exhibition_get_list_status_ok_res_mapper;
     private final Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res_Mapper exhibitionGetListStatusUploadPendingResMapper;
     private final Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res_Mapper exhibitionGetListStatusDeletePendingResMapper;
+    private final Exhibition_GET_LIST_STATUS_REVISION_PENDING_Res_Mapper exhibitionGetListStatusRevisionPendingResMapper;
 
-    public ExhibitionResource(ExhibitionService exhibitionService, ExhibitionRepository exhibitionRepository, Exhibition_POST_Req_Mapper exhibitionPostReqMapper, Exhibition_GET_LIST_STATUS_OK_Res_Mapper exhibitionGetListStatusOkResMapper, Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res_Mapper exhibitionGetListStatusUploadPendingResMapper, Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res_Mapper exhibitionGetListStatusDeletePendingResMapper) {
-        this.exhibitionService = exhibitionService;
-        this.exhibitionRepository = exhibitionRepository;
-        this.exhibitionPostReqMapper = exhibitionPostReqMapper;
-        this.exhibition_get_list_status_ok_res_mapper = exhibitionGetListStatusOkResMapper;
-        this.exhibitionGetListStatusUploadPendingResMapper = exhibitionGetListStatusUploadPendingResMapper;
-        this.exhibitionGetListStatusDeletePendingResMapper = exhibitionGetListStatusDeletePendingResMapper;
-    }
 
     @PostMapping("/exhibitions")
     public ResponseEntity<ExhibitionDTO> createExhibition(@RequestParam("image") MultipartFile file, @RequestParam("exhibition_post_req") String exhibition_post_req_str) throws URISyntaxException, JsonProcessingException {
@@ -175,10 +168,23 @@ public class ExhibitionResource {
         log.debug("REST request to get a page of Exhibitions");
         Page<ExhibitionDTO> page = exhibitionService.findAllByStatus_upload(pageable);
 
-        Page<Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res> exhibition_get_list_status_ok_res_page = page.map(exhibitionGetListStatusUploadPendingResMapper::toRes);
+        Page<Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res> exhibition_get_list_status_ok_res_page = page.map(exhibitionGetListStatusUploadPendingResMapper::toRes); /*TODO*/
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(exhibition_get_list_status_ok_res_page.getContent());
     }
+
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @GetMapping("/exhibitions/status/revision")
+    public ResponseEntity<List<Exhibition_GET_LIST_STATUS_REVISION_PENDING_Res>> getAllExhibitionsByStatusRevision(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+        log.debug("REST request to get a page of Exhibitions");
+        Page<ExhibitionDTO> page = exhibitionService.findAllByStatus_revision(pageable);
+
+        Page<Exhibition_GET_LIST_STATUS_REVISION_PENDING_Res> exhibitionGetListStatusRevisionPendingRes = page.map(exhibitionGetListStatusRevisionPendingResMapper::toRes);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(exhibitionGetListStatusRevisionPendingRes.getContent());
+    }
+
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/exhibitions/status/delete")
