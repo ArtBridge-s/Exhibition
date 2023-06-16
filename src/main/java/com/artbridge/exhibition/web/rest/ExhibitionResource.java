@@ -4,22 +4,17 @@ import com.artbridge.exhibition.application.dto.ExhibitionDTO;
 import com.artbridge.exhibition.application.service.ExhibitionService;
 import com.artbridge.exhibition.domain.model.Exhibition;
 import com.artbridge.exhibition.infrastructure.repository.ExhibitionRepository;
-import com.artbridge.exhibition.web.errors.BadRequestAlertException;
 import com.artbridge.exhibition.web.mapper.*;
 import com.artbridge.exhibition.web.request.ExhibitionByAdminReq;
 import com.artbridge.exhibition.web.request.ExhibitionRevisionRequest_Req;
 import com.artbridge.exhibition.web.request.Exhibition_POST_Req;
-import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res;
-import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_OK_Res;
-import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_REVISION_PENDING_Res;
-import com.artbridge.exhibition.web.response.Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res;
+import com.artbridge.exhibition.web.response.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
@@ -46,7 +41,7 @@ import tech.jhipster.web.util.ResponseUtil;
 @RequestMapping("/api")
 public class ExhibitionResource {
 
-    private final Logger log = LoggerFactory.getLogger(ExhibitionResource.class);
+    private final Logger log = LoggerFactory.getLogger(ExhibitionResource.class); /*TODO*/
 
     private static final String ENTITY_NAME = "exhibitionExhibition";
 
@@ -64,6 +59,7 @@ public class ExhibitionResource {
     private final Exhibition_GET_LIST_STATUS_REVISION_PENDING_Res_Mapper exhibitionGetListStatusRevisionPendingResMapper;
     private final ExhibitionByAdminReq_Mapper exhibitionByAdminReqMapper;
     private final ExhibitionRevisionRequest_Req_Mapper exhibitionRevisionRequestReqMapper;
+    private final Exhibition_GET_Res_Mapper exhibitionGetResMapper;
 
     @PostMapping("/exhibitions")
     public ResponseEntity<ExhibitionDTO> createExhibition(@RequestParam("image") MultipartFile file, @RequestParam("exhibition_post_req") String exhibition_post_req_str) throws URISyntaxException, JsonProcessingException {
@@ -188,11 +184,13 @@ public class ExhibitionResource {
     }
 
     @GetMapping("/exhibitions/{id}")
-    public ResponseEntity<ExhibitionDTO> getExhibition(@PathVariable String id) {
-        log.debug("REST request to get Exhibition : {}", id);
-        Optional<ExhibitionDTO> exhibitionDTO = exhibitionService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(exhibitionDTO);
+    public ResponseEntity<Exhibition_GET_Res> getExhibitionByStatus_OK(@PathVariable(value = "id") final String id) {
+        log.debug("특정 전시회 조회");
+        Optional<ExhibitionDTO> exhibitionDTO = exhibitionService.findOneStatusOK(id);
+        return ResponseUtil.wrapOrNotFound(exhibitionDTO.map(exhibitionGetResMapper::toRes));
     }
+
+
 
     /**
      * {@code DELETE  /exhibitions/:id} : delete the "id" exhibition.
