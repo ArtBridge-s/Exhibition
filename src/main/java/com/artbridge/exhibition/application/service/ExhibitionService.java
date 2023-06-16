@@ -54,4 +54,6 @@ public interface ExhibitionService {
 
     Optional<ExhibitionDTO> updateByAdmin(String id, ExhibitionDTO exhibitionDTO);
 
+    Optional<ExhibitionDTO> requestRevision(String id, ExhibitionDTO dto);
+
 }
