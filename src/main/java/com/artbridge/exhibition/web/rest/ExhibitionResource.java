@@ -188,6 +188,15 @@ public class ExhibitionResource {
         return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, id));
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @DeleteMapping("/exhibitions/admin/{id}")
+    public ResponseEntity<Void> deleteExhibitionByAdmin(@PathVariable(value = "id") final String id) {
+        log.debug("REST request to delete Exhibition : {}", id);
+
+        exhibitionService.deleteByAdmin(id);
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build();
+    }
+
     @PutMapping("/exhibitions/request/revision/{id}")
     public ResponseEntity<ExhibitionDTO> requestRevision(@PathVariable(value = "id") final String id, @RequestBody ExhibitionRevisionRequest_Req exhibitionRevisionRequestReq) {
         log.debug("REST request to update Exhibition : {}", id);
