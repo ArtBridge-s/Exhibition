@@ -101,6 +101,12 @@ public class ExhibitionServiceImpl implements ExhibitionService {
     }
 
     @Override
+    public Page<ExhibitionDTO> findAllByStatus_revision(Pageable pageable) {
+        log.debug("Status가 REVISION_PENDING인 모든 전시회를 가져옵니다.");
+        return exhibitionRepository.findAllByStatus(Status.REVISION_PENDING, pageable).map(exhibitionMapper::toDto);
+    }
+
+    @Override
     public Page<ExhibitionDTO> findAllByStatus_delete(Pageable pageable) {
         log.debug("Status가 DELETE_PENDING인 모든 전시회를 가져옵니다.");
         return exhibitionRepository.findAllByStatus(Status.DELETE_PENDING, pageable).map(exhibitionMapper::toDto);
