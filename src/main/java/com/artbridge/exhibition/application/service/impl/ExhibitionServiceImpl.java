@@ -166,4 +166,10 @@ public class ExhibitionServiceImpl implements ExhibitionService {
             .map(exhibitionMapper::toDto);
     }
 
+    @Override
+    public void authorizeDelete(String id) {
+        log.debug("Request to delete Exhibition : {}", id);
+        exhibitionRepository.deleteById(id);
+    }
+
 }
