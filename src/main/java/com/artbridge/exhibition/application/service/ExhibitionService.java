@@ -29,7 +29,7 @@ public interface ExhibitionService {
      */
     Optional<ExhibitionDTO> partialUpdate(ExhibitionDTO exhibitionDTO);
 
-    Page<ExhibitionDTO> findAllByStatus(Pageable pageable);
+    Page<ExhibitionDTO> findAllByStatus_ok(Pageable pageable);
 
     /**
      * Get the "id" exhibition.
@@ -46,6 +46,6 @@ public interface ExhibitionService {
      */
     void delete(String id);
 
-    Page<ExhibitionDTO> findAllByStatusPending(Pageable pageable);
+    Page<ExhibitionDTO> findAllByStatus_upload(Pageable pageable);
 
 }

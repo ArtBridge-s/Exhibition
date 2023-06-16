@@ -156,7 +156,7 @@ public class ExhibitionResource {
     @GetMapping("/exhibitions")
     public ResponseEntity<List<Exhibition_GET_LIST_STATUS_OK_Res>> getAllExhibitionsByStatusOK(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Exhibitions");
-        Page<ExhibitionDTO> page = exhibitionService.findAllByStatus(pageable);
+        Page<ExhibitionDTO> page = exhibitionService.findAllByStatus_ok(pageable);
 
         Page<Exhibition_GET_LIST_STATUS_OK_Res> exhibition_get_list_status_ok_res_page = page.map(exhibition_get_list_status_ok_res_mapper::toRes);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -168,7 +168,7 @@ public class ExhibitionResource {
     @GetMapping("/exhibitions/pendings")
     public ResponseEntity<List<Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res>> getAllExhibitionsByStatusUpload(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Exhibitions");
-        Page<ExhibitionDTO> page = exhibitionService.findAllByStatusPending(pageable);
+        Page<ExhibitionDTO> page = exhibitionService.findAllByStatus_upload(pageable);
 
         Page<Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res> exhibition_get_list_status_ok_res_page = page.map(exhibitionGetListStatusUploadPendingResMapper::toRes);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
