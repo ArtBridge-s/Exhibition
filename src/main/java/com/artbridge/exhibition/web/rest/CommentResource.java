@@ -12,8 +12,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,11 +27,10 @@ import tech.jhipster.web.util.ResponseUtil;
 /**
  * REST controller for managing {@link Comment}.
  */
+@Slf4j
 @RestController
 @RequestMapping("/api")
 public class CommentResource {
-
-    private final Logger log = LoggerFactory.getLogger(CommentResource.class);
 
     private static final String ENTITY_NAME = "exhibitionComment";
 
