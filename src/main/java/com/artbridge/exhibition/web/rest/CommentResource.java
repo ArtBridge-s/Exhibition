@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,7 @@ import tech.jhipster.web.util.ResponseUtil;
  * REST controller for managing {@link Comment}.
  */
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
 public class CommentResource {
@@ -38,13 +40,8 @@ public class CommentResource {
     private String applicationName;
 
     private final CommentService commentService;
-
     private final CommentRepository commentRepository;
 
-    public CommentResource(CommentService commentService, CommentRepository commentRepository) {
-        this.commentService = commentService;
-        this.commentRepository = commentRepository;
-    }
 
     /**
      * {@code POST  /comments} : Create a new comment.
