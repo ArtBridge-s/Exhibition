@@ -4,6 +4,7 @@ import com.artbridge.exhibition.infrastructure.security.*;
 import com.artbridge.exhibition.infrastructure.security.jwt.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -46,6 +47,10 @@ public class SecurityConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
             .authorizeRequests()
+            .antMatchers(HttpMethod.GET, "/api/exhibitions/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/api/views/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/api/likes/**").permitAll()
             .antMatchers("/api/authenticate").permitAll()
             .antMatchers("/api/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/**").authenticated()
