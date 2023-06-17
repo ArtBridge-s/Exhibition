@@ -190,18 +190,4 @@ public class ExhibitionResource {
         return ResponseUtil.wrapOrNotFound(exhibitionDTO.map(exhibitionGetResMapper::toRes));
     }
 
-
-
-    /**
-     * {@code DELETE  /exhibitions/:id} : delete the "id" exhibition.
-     *
-     * @param id the id of the exhibitionDTO to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
-    @DeleteMapping("/exhibitions/{id}")
-    public ResponseEntity<Void> deleteExhibition(@PathVariable String id) {
-        log.debug("REST request to delete Exhibition : {}", id);
-        exhibitionService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id)).build();
-    }
 }
