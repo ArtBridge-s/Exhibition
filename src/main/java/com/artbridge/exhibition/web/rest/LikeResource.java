@@ -10,8 +10,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,10 +27,9 @@ import tech.jhipster.web.util.ResponseUtil;
  * REST controller for managing {@link Like}.
  */
 @RestController
+@Slf4j
 @RequestMapping("/api")
 public class LikeResource {
-
-    private final Logger log = LoggerFactory.getLogger(LikeResource.class);
 
     private static final String ENTITY_NAME = "exhibitionLike";
 

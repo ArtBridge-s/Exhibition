@@ -18,8 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,10 +37,9 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/api")
 public class ExhibitionResource {
-
-    private final Logger log = LoggerFactory.getLogger(ExhibitionResource.class); /*TODO*/
 
     private static final String ENTITY_NAME = "exhibitionExhibition";
 
