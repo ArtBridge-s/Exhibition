@@ -13,6 +13,8 @@ public interface CommentService {
 
     CommentDTO saveCommentForExhibition(String exhibitionId, CommentDTO commentDTO);
 
+    Page<CommentDTO> findAllByExhibitionId(String exhibitionId, Pageable pageable);
+
     /**
      * Updates a comment.
      *
@@ -51,4 +53,5 @@ public interface CommentService {
      * @param id the id of the entity.
      */
     void delete(String id);
+
 }

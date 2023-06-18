@@ -45,6 +45,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public Page<CommentDTO> findAllByExhibitionId(String exhibitionId, Pageable pageable) {
+        log.debug("Request to get all Comments by exhibitionId : {}", exhibitionId);
+        return commentRepository.findAllByExhibition_Id(exhibitionId, pageable).map(commentMapper::toDto);
+    }
+
+    @Override
     public CommentDTO update(CommentDTO commentDTO) {
         log.debug("Request to update Comment : {}", commentDTO);
         Comment comment = commentMapper.toEntity(commentDTO);
