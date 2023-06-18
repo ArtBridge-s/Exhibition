@@ -33,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDTO save(String exhibitionId, CommentDTO commentDTO) {
+    public CommentDTO saveCommentForExhibition(String exhibitionId, CommentDTO commentDTO) {
         log.debug("Request to save Comment : {}", commentDTO);
         Comment comment = commentMapper.toEntity(commentDTO);
 

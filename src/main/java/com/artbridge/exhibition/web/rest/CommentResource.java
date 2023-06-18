@@ -49,7 +49,7 @@ public class CommentResource {
     @PostMapping("/exhibition/{id}/comments")
     public ResponseEntity<CommentDTO> createComment(@PathVariable(value = "id", required = false) final String exhibitionId, @RequestBody Comment_POST_Req comment_post_req) throws URISyntaxException {
         log.debug("REST request to save Comment : {}", comment_post_req_mapper.toDto(comment_post_req));
-        CommentDTO result = commentService.save(exhibitionId, comment_post_req_mapper.toDto(comment_post_req));
+        CommentDTO result = commentService.saveCommentForExhibition(exhibitionId, comment_post_req_mapper.toDto(comment_post_req));
         return ResponseEntity.created(new URI("/api/comments/" + result.getId())).headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId())).body(result);
     }
 

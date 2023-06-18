@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
  */
 public interface CommentService {
 
-    CommentDTO save(String exhibitionId, CommentDTO commentDTO);
+    CommentDTO saveCommentForExhibition(String exhibitionId, CommentDTO commentDTO);
 
     /**
      * Updates a comment.
