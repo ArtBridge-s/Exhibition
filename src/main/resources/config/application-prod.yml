@@ -58,7 +58,7 @@ spring:
       # it can be set to any label, branch or commit of the configuration source Git repository
   data:
     mongodb:
-      uri: mongodb://localhost:27017
+      uri: mongodb+srv://test:93414223@cluster0.3f1nxzq.mongodb.net/?retryWrites=true&w=majority
       database: Exhibition
   thymeleaf:
     cache: true
