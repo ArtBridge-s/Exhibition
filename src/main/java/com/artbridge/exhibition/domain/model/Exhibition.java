@@ -32,6 +32,9 @@ public class Exhibition implements Serializable {
     @Field("location")
     private String location;
 
+    @Field("content")
+    private String content;
+
     @Field("fee")
     private String fee;
 
