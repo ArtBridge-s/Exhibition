@@ -55,17 +55,17 @@ public class Exhibition implements Serializable {
 
     @DBRef
     @Field("comments")
-    @JsonIgnoreProperties(value = { "artwork" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "exhibition" }, allowSetters = true)
     private Set<Comment> comments = new HashSet<>();
 
     @DBRef
     @Field("views")
-    @JsonIgnoreProperties(value = { "artwork" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "exhibition" }, allowSetters = true)
     private Set<View> views = new HashSet<>();
 
     @DBRef
     @Field("likes")
-    @JsonIgnoreProperties(value = { "artwork" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "exhibition" }, allowSetters = true)
     private Set<Like> likes = new HashSet<>();
 
     public void setCreatedMember(Long id, String login) {
