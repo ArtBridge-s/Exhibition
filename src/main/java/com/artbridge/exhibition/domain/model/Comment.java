@@ -2,6 +2,7 @@ package com.artbridge.exhibition.domain.model;
 
 import com.artbridge.exhibition.domain.valueobject.Member;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 
 import lombok.Data;
@@ -30,7 +31,15 @@ public class Comment implements Serializable {
 
     @DBRef
     @Field("exhibition")
-    @JsonIgnoreProperties(value = { "comments", "views", "likes" }, allowSetters = true)
+    @JsonIgnoreProperties(value = {"comments", "views", "likes"}, allowSetters = true)
     private Exhibition exhibition;
 
+    public void setExhibitionId(String exhibitionId) {
+        this.exhibition = new Exhibition();
+        this.exhibition.setId(exhibitionId);
+    }
+
+    public void setCreatedMember(Long id, String login) {
+        this.createdMember = new Member(id, login);
+    }
 }
