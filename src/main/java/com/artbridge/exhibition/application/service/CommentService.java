@@ -13,10 +13,11 @@ public interface CommentService {
     /**
      * Save a comment.
      *
-     * @param commentDTO the entity to save.
+     * @param exhibitionId
+     * @param commentDTO   the entity to save.
      * @return the persisted entity.
      */
-    CommentDTO save(CommentDTO commentDTO);
+    CommentDTO save(String exhibitionId, CommentDTO commentDTO);
 
     /**
      * Updates a comment.

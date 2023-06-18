@@ -1,6 +1,7 @@
 package com.artbridge.exhibition.application.service.impl;
 
 import com.artbridge.exhibition.domain.model.Comment;
+import com.artbridge.exhibition.domain.service.CommentDomainService;
 import com.artbridge.exhibition.infrastructure.repository.CommentRepository;
 import com.artbridge.exhibition.application.service.CommentService;
 import com.artbridge.exhibition.application.dto.CommentDTO;
@@ -21,19 +22,25 @@ public class CommentServiceImpl implements CommentService {
     private final Logger log = LoggerFactory.getLogger(CommentServiceImpl.class);
 
     private final CommentRepository commentRepository;
-
     private final CommentMapper commentMapper;
+    private final CommentDomainService commentDomainService;
 
-    public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper) {
+
+    public CommentServiceImpl(CommentRepository commentRepository, CommentMapper commentMapper, CommentDomainService commentDomainService) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
+        this.commentDomainService = commentDomainService;
     }
 
     @Override
-    public CommentDTO save(CommentDTO commentDTO) {
+    public CommentDTO save(String exhibitionId, CommentDTO commentDTO) {
         log.debug("Request to save Comment : {}", commentDTO);
         Comment comment = commentMapper.toEntity(commentDTO);
+
+        comment.setExhibitionId(exhibitionId);
+        comment = commentDomainService.initCreatedMember(comment);
         comment = commentRepository.save(comment);
+
         return commentMapper.toDto(comment);
     }
 
