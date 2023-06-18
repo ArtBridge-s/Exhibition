@@ -46,13 +46,6 @@ public class CommentResource {
     private final CommentRepository commentRepository;
 
 
-    /**
-     * {@code POST  /comments} : Create a new comment.
-     *
-     * @param commentDTO the commentDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new commentDTO, or with status {@code 400 (Bad Request)} if the comment has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PostMapping("/exhibition/{id}/comments")
     public ResponseEntity<CommentDTO> createComment(@PathVariable(value = "id", required = false) final String exhibitionId, @RequestBody Comment_POST_Req comment_post_req) throws URISyntaxException {
         log.debug("REST request to save Comment : {}", comment_post_req_mapper.toDto(comment_post_req));
