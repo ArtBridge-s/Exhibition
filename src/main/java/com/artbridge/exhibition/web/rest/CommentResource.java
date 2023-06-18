@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import com.artbridge.exhibition.web.mapper.Comment_POST_Req_Mapper;
+import com.artbridge.exhibition.web.request.Comment_POST_Req;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -28,6 +31,7 @@ import tech.jhipster.web.util.ResponseUtil;
  * REST controller for managing {@link Comment}.
  */
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api")
 public class CommentResource {
@@ -38,28 +42,14 @@ public class CommentResource {
     private String applicationName;
 
     private final CommentService commentService;
-
+    private final Comment_POST_Req_Mapper comment_post_req_mapper;
     private final CommentRepository commentRepository;
 
-    public CommentResource(CommentService commentService, CommentRepository commentRepository) {
-        this.commentService = commentService;
-        this.commentRepository = commentRepository;
-    }
 
-    /**
-     * {@code POST  /comments} : Create a new comment.
-     *
-     * @param commentDTO the commentDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new commentDTO, or with status {@code 400 (Bad Request)} if the comment has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PostMapping("/comments")
-    public ResponseEntity<CommentDTO> createComment(@RequestBody CommentDTO commentDTO) throws URISyntaxException {
-        log.debug("REST request to save Comment : {}", commentDTO);
-        if (commentDTO.getId() != null) {
-            throw new BadRequestAlertException("A new comment cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        CommentDTO result = commentService.save(commentDTO);
+    @PostMapping("/exhibition/{id}/comments")
+    public ResponseEntity<CommentDTO> createComment(@PathVariable(value = "id", required = false) final String exhibitionId, @RequestBody Comment_POST_Req comment_post_req) throws URISyntaxException {
+        log.debug("REST request to save Comment : {}", comment_post_req_mapper.toDto(comment_post_req));
+        CommentDTO result = commentService.saveCommentForExhibition(exhibitionId, comment_post_req_mapper.toDto(comment_post_req));
         return ResponseEntity.created(new URI("/api/comments/" + result.getId())).headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId())).body(result);
     }
 

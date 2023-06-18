@@ -10,13 +10,8 @@ import org.springframework.data.domain.Pageable;
  * Service Interface for managing {@link Comment}.
  */
 public interface CommentService {
-    /**
-     * Save a comment.
-     *
-     * @param commentDTO the entity to save.
-     * @return the persisted entity.
-     */
-    CommentDTO save(CommentDTO commentDTO);
+
+    CommentDTO saveCommentForExhibition(String exhibitionId, CommentDTO commentDTO);
 
     /**
      * Updates a comment.
