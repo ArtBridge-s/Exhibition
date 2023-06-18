@@ -1,19 +1,19 @@
 package com.artbridge.exhibition.web.rest;
 
+import com.artbridge.exhibition.application.dto.CommentDTO;
+import com.artbridge.exhibition.application.service.CommentService;
 import com.artbridge.exhibition.domain.model.Comment;
 import com.artbridge.exhibition.infrastructure.repository.CommentRepository;
-import com.artbridge.exhibition.application.service.CommentService;
-import com.artbridge.exhibition.application.dto.CommentDTO;
 import com.artbridge.exhibition.web.errors.BadRequestAlertException;
-
+import com.artbridge.exhibition.web.mapper.Comment_GET_Res_Mapper;
+import com.artbridge.exhibition.web.mapper.Comment_POST_Req_Mapper;
+import com.artbridge.exhibition.web.request.Comment_POST_Req;
+import com.artbridge.exhibition.web.response.Comment_GET_Res;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-
-import com.artbridge.exhibition.web.mapper.Comment_POST_Req_Mapper;
-import com.artbridge.exhibition.web.request.Comment_POST_Req;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,14 +43,32 @@ public class CommentResource {
 
     private final CommentService commentService;
     private final Comment_POST_Req_Mapper comment_post_req_mapper;
+    private final Comment_GET_Res_Mapper comment_get_res_mapper;
     private final CommentRepository commentRepository;
 
-
     @PostMapping("/exhibition/{id}/comments")
-    public ResponseEntity<CommentDTO> createComment(@PathVariable(value = "id", required = false) final String exhibitionId, @RequestBody Comment_POST_Req comment_post_req) throws URISyntaxException {
+    public ResponseEntity<CommentDTO> createComment(
+        @PathVariable(value = "id", required = false) final String exhibitionId,
+        @RequestBody Comment_POST_Req comment_post_req
+    ) throws URISyntaxException {
         log.debug("REST request to save Comment : {}", comment_post_req_mapper.toDto(comment_post_req));
         CommentDTO result = commentService.saveCommentForExhibition(exhibitionId, comment_post_req_mapper.toDto(comment_post_req));
-        return ResponseEntity.created(new URI("/api/comments/" + result.getId())).headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId())).body(result);
+        return ResponseEntity
+            .created(new URI("/api/comments/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
+            .body(result);
+    }
+
+    @GetMapping("/exhibition/{id}/comments")
+    public ResponseEntity<List<Comment_GET_Res>> getAllCommentsForExhibition(
+        @PathVariable(value = "id", required = false) final String exhibitionId,
+        @org.springdoc.api.annotations.ParameterObject Pageable pageable
+    ) {
+        log.debug("REST request to get a page of Comments");
+
+        Page<Comment_GET_Res> page = commentService.findAllByExhibitionId(exhibitionId, pageable).map(comment_get_res_mapper::toReq);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**
@@ -64,7 +82,10 @@ public class CommentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/comments/{id}")
-    public ResponseEntity<CommentDTO> updateComment(@PathVariable(value = "id", required = false) final String id, @RequestBody CommentDTO commentDTO) throws URISyntaxException {
+    public ResponseEntity<CommentDTO> updateComment(
+        @PathVariable(value = "id", required = false) final String id,
+        @RequestBody CommentDTO commentDTO
+    ) throws URISyntaxException {
         log.debug("REST request to update Comment : {}, {}", id, commentDTO);
         if (commentDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -78,7 +99,10 @@ public class CommentResource {
         }
 
         CommentDTO result = commentService.update(commentDTO);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, commentDTO.getId())).body(result);
+        return ResponseEntity
+            .ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, commentDTO.getId()))
+            .body(result);
     }
 
     /**
@@ -92,8 +116,11 @@ public class CommentResource {
      * or with status {@code 500 (Internal Server Error)} if the commentDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/comments/{id}", consumes = {"application/json", "application/merge-patch+json"})
-    public ResponseEntity<CommentDTO> partialUpdateComment(@PathVariable(value = "id", required = false) final String id, @RequestBody CommentDTO commentDTO) throws URISyntaxException {
+    @PatchMapping(value = "/comments/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    public ResponseEntity<CommentDTO> partialUpdateComment(
+        @PathVariable(value = "id", required = false) final String id,
+        @RequestBody CommentDTO commentDTO
+    ) throws URISyntaxException {
         log.debug("REST request to partial update Comment partially : {}, {}", id, commentDTO);
         if (commentDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -108,7 +135,10 @@ public class CommentResource {
 
         Optional<CommentDTO> result = commentService.partialUpdate(commentDTO);
 
-        return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, commentDTO.getId()));
+        return ResponseUtil.wrapOrNotFound(
+            result,
+            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, commentDTO.getId())
+        );
     }
 
     /**
