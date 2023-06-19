@@ -1,15 +1,13 @@
 package com.artbridge.exhibition.application.service.impl;
 
+import com.artbridge.exhibition.application.dto.ExhibitionDTO;
+import com.artbridge.exhibition.application.mapper.ExhibitionMapper;
+import com.artbridge.exhibition.application.service.ExhibitionService;
 import com.artbridge.exhibition.domain.enumeration.Status;
 import com.artbridge.exhibition.domain.model.Exhibition;
 import com.artbridge.exhibition.domain.service.ExhibitionDomainService;
 import com.artbridge.exhibition.infrastructure.repository.ExhibitionRepository;
-import com.artbridge.exhibition.application.service.ExhibitionService;
-import com.artbridge.exhibition.application.dto.ExhibitionDTO;
-import com.artbridge.exhibition.application.mapper.ExhibitionMapper;
-
 import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -31,8 +29,11 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 
     private final ExhibitionDomainService exhibitionDomainService;
 
-
-    public ExhibitionServiceImpl(ExhibitionRepository exhibitionRepository, ExhibitionMapper exhibitionMapper, ExhibitionDomainService exhibitionDomainService) {
+    public ExhibitionServiceImpl(
+        ExhibitionRepository exhibitionRepository,
+        ExhibitionMapper exhibitionMapper,
+        ExhibitionDomainService exhibitionDomainService
+    ) {
         this.exhibitionRepository = exhibitionRepository;
         this.exhibitionMapper = exhibitionMapper;
         this.exhibitionDomainService = exhibitionDomainService;
@@ -74,7 +75,6 @@ public class ExhibitionServiceImpl implements ExhibitionService {
             .map(exhibitionMapper::toDto);
     }
 
-
     @Override
     public Optional<ExhibitionDTO> findOneStatusOK(String id) {
         log.debug("Request to get Exhibition : {}", id);
@@ -90,26 +90,25 @@ public class ExhibitionServiceImpl implements ExhibitionService {
     @Override
     public Page<ExhibitionDTO> findAllByStatus_ok(Pageable pageable) {
         log.debug("Status가 OK인 모든 전시회를 가져옵니다.");
-        return exhibitionRepository.findAllByStatus(Status.OK, pageable).map(exhibitionMapper::toDto);
+        return exhibitionRepository.findAllByStatusOrderByIdDesc(Status.OK, pageable).map(exhibitionMapper::toDto);
     }
-
 
     @Override
     public Page<ExhibitionDTO> findAllByStatus_upload(Pageable pageable) {
         log.debug("Status가 UPLOAD_PENDING인 모든 전시회를 가져옵니다.");
-        return exhibitionRepository.findAllByStatus(Status.UPLOAD_PENDING, pageable).map(exhibitionMapper::toDto);
+        return exhibitionRepository.findAllByStatusOrderByIdDesc(Status.UPLOAD_PENDING, pageable).map(exhibitionMapper::toDto);
     }
 
     @Override
     public Page<ExhibitionDTO> findAllByStatus_revision(Pageable pageable) {
         log.debug("Status가 REVISION_PENDING인 모든 전시회를 가져옵니다.");
-        return exhibitionRepository.findAllByStatus(Status.REVISION_PENDING, pageable).map(exhibitionMapper::toDto);
+        return exhibitionRepository.findAllByStatusOrderByIdDesc(Status.REVISION_PENDING, pageable).map(exhibitionMapper::toDto);
     }
 
     @Override
     public Page<ExhibitionDTO> findAllByStatus_delete(Pageable pageable) {
         log.debug("Status가 DELETE_PENDING인 모든 전시회를 가져옵니다.");
-        return exhibitionRepository.findAllByStatus(Status.DELETE_PENDING, pageable).map(exhibitionMapper::toDto);
+        return exhibitionRepository.findAllByStatusOrderByIdDesc(Status.DELETE_PENDING, pageable).map(exhibitionMapper::toDto);
     }
 
     @Override
@@ -168,7 +167,7 @@ public class ExhibitionServiceImpl implements ExhibitionService {
 
     @Override
     public void authorizeDelete(String id) {
-        log.debug("Request to delete Exhibition : {}", id); /*TODO*/
+        log.debug("Request to delete Exhibition : {}", id);/*TODO*/
         exhibitionRepository.deleteById(id);
     }
 
@@ -190,5 +189,4 @@ public class ExhibitionServiceImpl implements ExhibitionService {
         exhibition = exhibitionRepository.save(exhibition);
         return exhibitionMapper.toDto(exhibition);
     }
-
 }
