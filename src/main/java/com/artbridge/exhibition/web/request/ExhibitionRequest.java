@@ -1,22 +1,18 @@
-package com.artbridge.exhibition.web.response;
+package com.artbridge.exhibition.web.request;
 
 import com.artbridge.exhibition.application.dto.ArtistDTO;
-import com.artbridge.exhibition.application.dto.MemberDTO;
 import com.artbridge.exhibition.application.dto.PeriodDTO;
 import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class Exhibition_GET_Res implements Serializable {
+public class ExhibitionRequest implements Serializable {
 
-    private String id;
     private String title;
     private String location;
     private String content;
     private String fee;
     private String contact;
-    private String imgUrl;
     private PeriodDTO periodDTO;
     private ArtistDTO artistDTO;
-    private MemberDTO createdMemberDTO;
 }

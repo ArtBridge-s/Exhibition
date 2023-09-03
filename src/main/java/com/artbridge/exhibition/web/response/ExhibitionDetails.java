@@ -7,7 +7,7 @@ import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class Exhibition_GET_LIST_STATUS_OK_Res implements Serializable {
+public class ExhibitionDetails implements Serializable {
 
     private String id;
     private String title;

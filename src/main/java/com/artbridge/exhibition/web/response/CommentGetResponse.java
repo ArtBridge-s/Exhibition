@@ -6,7 +6,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class Comment_GET_Res implements Serializable {
+public class CommentGetResponse implements Serializable {
     private String id;
     private MemberDTO createdMemberDTO;
     private String content;

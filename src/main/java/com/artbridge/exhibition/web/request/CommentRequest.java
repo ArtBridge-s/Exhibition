@@ -5,6 +5,6 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class Comment_POST_Req implements Serializable {
+public class CommentRequest implements Serializable {
     private String content;
 }

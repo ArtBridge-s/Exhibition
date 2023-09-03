@@ -6,7 +6,7 @@ import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class ExhibitionRevisionRequest_Req implements Serializable {
+public class AdminExhibitionRequest implements Serializable {
 
     private String title;
     private String location;
