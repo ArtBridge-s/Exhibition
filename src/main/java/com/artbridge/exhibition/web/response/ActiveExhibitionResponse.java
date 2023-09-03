@@ -7,7 +7,7 @@ import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class PendingUploadExhibition implements Serializable {
+public class ActiveExhibitionResponse implements Serializable {
 
     private String id;
     private String title;

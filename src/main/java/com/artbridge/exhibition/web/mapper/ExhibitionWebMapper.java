@@ -13,17 +13,17 @@ public interface ExhibitionWebMapper {
     ExhibitionRequest mapToExhibitionRequest(ExhibitionDTO dto);
     ExhibitionDTO mapToExhibitionDTO(ExhibitionRequest req);
 
-    ActiveExhibition mapToActiveExhibition(ExhibitionDTO dto);
-    ExhibitionDTO mapToExhibitionDTO(ActiveExhibition req);
+    ActiveExhibitionResponse mapToActiveExhibition(ExhibitionDTO dto);
+    ExhibitionDTO mapToExhibitionDTO(ActiveExhibitionResponse req);
 
-    PendingUploadExhibition mapToPendingUploadExhibition(ExhibitionDTO dto);
-    ExhibitionDTO mapToExhibitionDTO(PendingUploadExhibition req);
+    PendingUploadExhibitionResponse mapToPendingUploadExhibition(ExhibitionDTO dto);
+    ExhibitionDTO mapToExhibitionDTO(PendingUploadExhibitionResponse req);
 
-    PendingDeleteExhibition mapToPendingDeleteExhibition(ExhibitionDTO dto);
-    ExhibitionDTO mapToExhibitionDTO(PendingDeleteExhibition req);
+    PendingDeleteExhibitionResponse mapToPendingDeleteExhibition(ExhibitionDTO dto);
+    ExhibitionDTO mapToExhibitionDTO(PendingDeleteExhibitionResponse req);
 
-    PendingRevisionExhibition mapToPendingRevisionExhibition(ExhibitionDTO dto);
-    ExhibitionDTO mapToExhibitionDTO(PendingRevisionExhibition req);
+    PendingRevisionExhibitionResponse mapToPendingRevisionExhibition(ExhibitionDTO dto);
+    ExhibitionDTO mapToExhibitionDTO(PendingRevisionExhibitionResponse req);
 
     AdminExhibitionRequest mapToAdminExhibitionRequest(ExhibitionDTO dto);
     ExhibitionDTO mapToExhibitionDTO(AdminExhibitionRequest req);
@@ -31,6 +31,6 @@ public interface ExhibitionWebMapper {
     ExhibitionRevisionRequest mapToExhibitionRevisionRequest(ExhibitionDTO dto);
     ExhibitionDTO mapToExhibitionDTO(ExhibitionRevisionRequest req);
 
-    ExhibitionDetails mapToExhibitionDetails(ExhibitionDTO exhibitionDTO);
-    ExhibitionDetails mapToExhibitionDTO(ExhibitionDetails exhibitionDetails);
+    ExhibitionDetailsResponse mapToExhibitionDetails(ExhibitionDTO exhibitionDTO);
+    ExhibitionDetailsResponse mapToExhibitionDTO(ExhibitionDetailsResponse exhibitionDetailsResponse);
 }

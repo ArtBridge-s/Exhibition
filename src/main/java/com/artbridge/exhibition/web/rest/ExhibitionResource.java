@@ -67,44 +67,44 @@ public class ExhibitionResource {
 
 
     @GetMapping("/exhibitions/status/ok")
-    public ResponseEntity<List<ActiveExhibition>> getAllExhibitionsByStatusOK(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<ActiveExhibitionResponse>> getAllExhibitionsByStatusOK(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Exhibitions");
         Page<ExhibitionDTO> page = exhibitionService.findAllByStatus_ok(pageable);
 
-        Page<ActiveExhibition> exhibition_get_list_status_ok_res_page = page.map(exhibitionWebMapper::mapToActiveExhibition);
+        Page<ActiveExhibitionResponse> exhibition_get_list_status_ok_res_page = page.map(exhibitionWebMapper::mapToActiveExhibition);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(exhibition_get_list_status_ok_res_page.getContent());
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/exhibitions/status/upload")
-    public ResponseEntity<List<PendingUploadExhibition>> getAllExhibitionsByStatusUpload(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<PendingUploadExhibitionResponse>> getAllExhibitionsByStatusUpload(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Exhibitions");
         Page<ExhibitionDTO> page = exhibitionService.findAllByStatus_upload(pageable);
 
-        Page<PendingUploadExhibition> exhibitionGetListStatusUploadPendingRes = page.map(exhibitionWebMapper::mapToPendingUploadExhibition);
+        Page<PendingUploadExhibitionResponse> exhibitionGetListStatusUploadPendingRes = page.map(exhibitionWebMapper::mapToPendingUploadExhibition);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(exhibitionGetListStatusUploadPendingRes.getContent());
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/exhibitions/status/revision")
-    public ResponseEntity<List<PendingRevisionExhibition>> getAllExhibitionsByStatusRevision(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<PendingRevisionExhibitionResponse>> getAllExhibitionsByStatusRevision(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Exhibitions");
         Page<ExhibitionDTO> page = exhibitionService.findAllByStatus_revision(pageable);
 
-        Page<PendingRevisionExhibition> exhibitionGetListStatusRevisionPendingRes = page.map(exhibitionWebMapper::mapToPendingRevisionExhibition);
+        Page<PendingRevisionExhibitionResponse> exhibitionGetListStatusRevisionPendingRes = page.map(exhibitionWebMapper::mapToPendingRevisionExhibition);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(exhibitionGetListStatusRevisionPendingRes.getContent());
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/exhibitions/status/delete")
-    public ResponseEntity<List<PendingDeleteExhibition>> getAllExhibitionsByStatusDelete(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+    public ResponseEntity<List<PendingDeleteExhibitionResponse>> getAllExhibitionsByStatusDelete(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of Exhibitions");
         Page<ExhibitionDTO> page = exhibitionService.findAllByStatus_delete(pageable);
 
-        Page<PendingDeleteExhibition> exhibition_get_list_status_ok_res_page = page.map(exhibitionWebMapper::mapToPendingDeleteExhibition);
+        Page<PendingDeleteExhibitionResponse> exhibition_get_list_status_ok_res_page = page.map(exhibitionWebMapper::mapToPendingDeleteExhibition);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(exhibition_get_list_status_ok_res_page.getContent());
     }
@@ -175,7 +175,7 @@ public class ExhibitionResource {
     }
 
     @GetMapping("/exhibitions/{id}")
-    public ResponseEntity<ExhibitionDetails> getExhibitionByStatus_OK(@PathVariable(value = "id") final String id) {
+    public ResponseEntity<ExhibitionDetailsResponse> getExhibitionByStatus_OK(@PathVariable(value = "id") final String id) {
         log.debug("특정 전시회 조회");
         Optional<ExhibitionDTO> exhibitionDTO = exhibitionService.findOneStatusOK(id);
         return ResponseUtil.wrapOrNotFound(exhibitionDTO.map(exhibitionWebMapper::mapToExhibitionDetails));
