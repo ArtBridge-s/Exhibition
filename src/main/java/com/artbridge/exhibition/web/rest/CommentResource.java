@@ -5,10 +5,9 @@ import com.artbridge.exhibition.application.service.CommentService;
 import com.artbridge.exhibition.domain.model.Comment;
 import com.artbridge.exhibition.infrastructure.repository.CommentRepository;
 import com.artbridge.exhibition.web.errors.BadRequestAlertException;
-import com.artbridge.exhibition.web.mapper.Comment_GET_Res_Mapper;
-import com.artbridge.exhibition.web.mapper.Comment_POST_Req_Mapper;
-import com.artbridge.exhibition.web.request.Comment_POST_Req;
-import com.artbridge.exhibition.web.response.Comment_GET_Res;
+import com.artbridge.exhibition.web.mapper.CommentWebMapper;
+import com.artbridge.exhibition.web.request.CommentRequest;
+import com.artbridge.exhibition.web.response.CommentGetResponse;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -42,17 +41,17 @@ public class CommentResource {
     private String applicationName;
 
     private final CommentService commentService;
-    private final Comment_POST_Req_Mapper comment_post_req_mapper;
-    private final Comment_GET_Res_Mapper comment_get_res_mapper;
+
+    private final CommentWebMapper commentWebMapper;
     private final CommentRepository commentRepository;
 
     @PostMapping("/exhibition/{id}/comments")
     public ResponseEntity<CommentDTO> createComment(
         @PathVariable(value = "id", required = false) final String exhibitionId,
-        @RequestBody Comment_POST_Req comment_post_req
+        @RequestBody CommentRequest comment_post_req
     ) throws URISyntaxException {
-        log.debug("REST request to save Comment : {}", comment_post_req_mapper.toDto(comment_post_req));
-        CommentDTO result = commentService.saveCommentForExhibition(exhibitionId, comment_post_req_mapper.toDto(comment_post_req));
+        log.debug("REST request to save Comment : {}", commentWebMapper.mapToCommentDTO(comment_post_req));
+        CommentDTO result = commentService.saveCommentForExhibition(exhibitionId, commentWebMapper.mapToCommentDTO(comment_post_req));
         return ResponseEntity
             .created(new URI("/api/comments/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId()))
@@ -60,13 +59,13 @@ public class CommentResource {
     }
 
     @GetMapping("/exhibition/{id}/comments")
-    public ResponseEntity<List<Comment_GET_Res>> getAllCommentsForExhibition(
+    public ResponseEntity<List<CommentGetResponse>> getAllCommentsForExhibition(
         @PathVariable(value = "id", required = false) final String exhibitionId,
         @org.springdoc.api.annotations.ParameterObject Pageable pageable
     ) {
         log.debug("REST request to get a page of Comments");
 
-        Page<Comment_GET_Res> page = commentService.findAllByExhibitionId(exhibitionId, pageable).map(comment_get_res_mapper::toReq);
+        Page<CommentGetResponse> page = commentService.findAllByExhibitionId(exhibitionId, pageable).map(commentWebMapper::mapToCommentGetResponse);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
