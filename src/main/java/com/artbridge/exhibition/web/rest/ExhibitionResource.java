@@ -4,6 +4,7 @@ import com.artbridge.exhibition.application.dto.ExhibitionDTO;
 import com.artbridge.exhibition.application.service.ExhibitionService;
 import com.artbridge.exhibition.domain.model.Exhibition;
 import com.artbridge.exhibition.infrastructure.repository.ExhibitionRepository;
+import com.artbridge.exhibition.web.mapper.ExhibitionWebMapper;
 import com.artbridge.exhibition.web.request.AdminExhibitionRequest;
 import com.artbridge.exhibition.web.request.ExhibitionRevisionRequest;
 import com.artbridge.exhibition.web.request.ExhibitionRequest;
@@ -49,14 +50,7 @@ public class ExhibitionResource {
 
     private final ExhibitionRepository exhibitionRepository;
 
-    private final Exhibition_POST_Req_Mapper exhibitionPostReqMapper;
-    private final Exhibition_GET_LIST_STATUS_OK_Res_Mapper exhibitionGetListStatusOkResMapper;
-    private final Exhibition_GET_LIST_STATUS_UPLOAD_PENDING_Res_Mapper exhibitionGetListStatusUploadPendingResMapper;
-    private final Exhibition_GET_LIST_STATUS_DELETE_PENDING_Res_Mapper exhibitionGetListStatusDeletePendingResMapper;
-    private final Exhibition_GET_LIST_STATUS_REVISION_PENDING_Res_Mapper exhibitionGetListStatusRevisionPendingResMapper;
-    private final ExhibitionByAdminReq_Mapper exhibitionByAdminReqMapper;
-    private final ExhibitionRevisionRequest_Req_Mapper exhibitionRevisionRequestReqMapper;
-    private final Exhibition_GET_Res_Mapper exhibitionGetResMapper;
+    private final ExhibitionWebMapper exhibitionWebMapper;
 
     @PostMapping("/exhibitions")
     public ResponseEntity<ExhibitionDTO> createExhibition(@RequestParam("image") MultipartFile file, @RequestParam("exhibition_post_req") String exhibition_post_req_str) throws URISyntaxException, JsonProcessingException {
@@ -65,7 +59,7 @@ public class ExhibitionResource {
 
         log.debug("REST request to save Exhibition : {}", exhibition_request);
 
-        ExhibitionDTO exhibitionDTO = exhibitionPostReqMapper.toDto(exhibition_request);
+        ExhibitionDTO exhibitionDTO = exhibitionWebMapper.mapToExhibitionDTO(exhibition_request);
         ExhibitionDTO result = exhibitionService.save(file, exhibitionDTO);
 
         return ResponseEntity.created(new URI("/api/exhibitions/" + result.getId())).headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId())).body(result);
@@ -77,7 +71,7 @@ public class ExhibitionResource {
         log.debug("REST request to get a page of Exhibitions");
         Page<ExhibitionDTO> page = exhibitionService.findAllByStatus_ok(pageable);
 
-        Page<ActiveExhibition> exhibition_get_list_status_ok_res_page = page.map(exhibitionGetListStatusOkResMapper::toRes);
+        Page<ActiveExhibition> exhibition_get_list_status_ok_res_page = page.map(exhibitionWebMapper::mapToActiveExhibition);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(exhibition_get_list_status_ok_res_page.getContent());
     }
@@ -88,7 +82,7 @@ public class ExhibitionResource {
         log.debug("REST request to get a page of Exhibitions");
         Page<ExhibitionDTO> page = exhibitionService.findAllByStatus_upload(pageable);
 
-        Page<PendingUploadExhibition> exhibitionGetListStatusUploadPendingRes = page.map(exhibitionGetListStatusUploadPendingResMapper::toRes);
+        Page<PendingUploadExhibition> exhibitionGetListStatusUploadPendingRes = page.map(exhibitionWebMapper::mapToPendingUploadExhibition);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(exhibitionGetListStatusUploadPendingRes.getContent());
     }
@@ -99,7 +93,7 @@ public class ExhibitionResource {
         log.debug("REST request to get a page of Exhibitions");
         Page<ExhibitionDTO> page = exhibitionService.findAllByStatus_revision(pageable);
 
-        Page<PendingRevisionExhibition> exhibitionGetListStatusRevisionPendingRes = page.map(exhibitionGetListStatusRevisionPendingResMapper::toRes);
+        Page<PendingRevisionExhibition> exhibitionGetListStatusRevisionPendingRes = page.map(exhibitionWebMapper::mapToPendingRevisionExhibition);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(exhibitionGetListStatusRevisionPendingRes.getContent());
     }
@@ -110,7 +104,7 @@ public class ExhibitionResource {
         log.debug("REST request to get a page of Exhibitions");
         Page<ExhibitionDTO> page = exhibitionService.findAllByStatus_delete(pageable);
 
-        Page<PendingDeleteExhibition> exhibition_get_list_status_ok_res_page = page.map(exhibitionGetListStatusDeletePendingResMapper::toRes);
+        Page<PendingDeleteExhibition> exhibition_get_list_status_ok_res_page = page.map(exhibitionWebMapper::mapToPendingDeleteExhibition);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(exhibition_get_list_status_ok_res_page.getContent());
     }
@@ -123,7 +117,7 @@ public class ExhibitionResource {
 
         log.debug("REST request to save Exhibition : {}", exhibition_request);
 
-        ExhibitionDTO exhibitionDTO = exhibitionPostReqMapper.toDto(exhibition_request);
+        ExhibitionDTO exhibitionDTO = exhibitionWebMapper.mapToExhibitionDTO(exhibition_request);
         ExhibitionDTO result = exhibitionService.saveByAdmin(file, exhibitionDTO);
 
         return ResponseEntity.created(new URI("/api/exhibitions/" + result.getId())).headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId())).body(result);
@@ -134,7 +128,7 @@ public class ExhibitionResource {
     public ResponseEntity<ExhibitionDTO> updateExhibitionByAdmin(@PathVariable(value = "id") final String id, @RequestBody AdminExhibitionRequest adminExhibitionRequest) {
         log.debug("REST request to update Exhibition : {}, {}", id, adminExhibitionRequest);
 
-        Optional<ExhibitionDTO> result = exhibitionService.updateByAdmin(id, exhibitionByAdminReqMapper.toDto(adminExhibitionRequest));
+        Optional<ExhibitionDTO> result = exhibitionService.updateByAdmin(id, exhibitionWebMapper.mapToExhibitionDTO(adminExhibitionRequest));
         return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, id));
     }
 
@@ -151,7 +145,7 @@ public class ExhibitionResource {
     public ResponseEntity<ExhibitionDTO> requestRevision(@PathVariable(value = "id") final String id, @RequestBody ExhibitionRevisionRequest exhibitionRevisionRequestReq) {
         log.debug("REST request to update Exhibition : {}", id);
 
-        Optional<ExhibitionDTO> result = exhibitionService.requestRevision(id, exhibitionRevisionRequestReqMapper.toDto(exhibitionRevisionRequestReq));
+        Optional<ExhibitionDTO> result = exhibitionService.requestRevision(id, exhibitionWebMapper.mapToExhibitionDTO(exhibitionRevisionRequestReq));
         return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, id));
     }
 
@@ -184,7 +178,7 @@ public class ExhibitionResource {
     public ResponseEntity<ExhibitionDetails> getExhibitionByStatus_OK(@PathVariable(value = "id") final String id) {
         log.debug("특정 전시회 조회");
         Optional<ExhibitionDTO> exhibitionDTO = exhibitionService.findOneStatusOK(id);
-        return ResponseUtil.wrapOrNotFound(exhibitionDTO.map(exhibitionGetResMapper::toRes));
+        return ResponseUtil.wrapOrNotFound(exhibitionDTO.map(exhibitionWebMapper::mapToExhibitionDetails));
     }
 
 }
